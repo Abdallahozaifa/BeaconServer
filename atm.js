@@ -17,36 +17,43 @@ BrendonWelcomeImg.src = "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/
 console.log(welcomeAtmImg);
 
 options.onOpen = function(e) {
-    //console.log("Connection Open");
-    //console.log(e);
+    console.log("Connection Open");
 };
 
 options.onEnd = function(e) {
-    //console.log("Connection Closed");
-    //console.log(e);
+    console.log("Connection Closed");
     reqArr[0] = $.SSE('http://beaconapp-abdallahozaifa.c9users.io:8080/event', options);
     reqArr[0].start();
-    //console.log(reqArr[0]);
-    //reqArr[0].start();
-    //sse.start();
+};
+
+var IsJsonString = function(str) {
+    try {
+        JSON.parse(str);
+    }
+    catch (e) {
+        return false;
+    }
+    return true;
 };
 
 options.events = {
     beacon: function(e) {
-        //console.log('Custom Event');
-        console.log("Received Data from Center")
-        //console.log(e);
-        // if(e.data == welcomeAtmImg.src){
-        //     appImg.attr("src", e.data);    
-        // }
-        appImg.attr("src", e.data);
+        console.log("Received Data from Center");
+        var dataArr = e.data.split('\n');
+        var img = dataArr[0];
+        var amount = dataArr[1];
+        appImg.attr("src", img);
+        if(amount != undefined){
+            swal(
+                'Transaction Completed!',
+                "$" + amount + ".00" + ' has been Withdrawn!',
+                'success'
+            );
+        }
         reqArr[0].stop();
-        
     }
 };
 
 var sse = $.SSE('http://beaconapp-abdallahozaifa.c9users.io:8080/event', options);
 reqArr.push(sse);
 sse.start();
-
-
