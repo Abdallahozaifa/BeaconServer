@@ -36,6 +36,10 @@ var IsJsonString = function(str) {
     return true;
 };
 
+var isNumeric = function(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+};
+
 options.events = {
     beacon: function(e) {
         console.log("Received Data from Center");
@@ -43,12 +47,27 @@ options.events = {
         var img = dataArr[0];
         var amount = dataArr[1];
         appImg.attr("src", img);
-        if(amount != undefined){
+        if (isNumeric(amount) == true) {
             swal(
                 'Transaction Completed!',
                 "$" + amount + ".00" + ' has been Withdrawn!',
                 'success'
             );
+        }
+        else {
+            console.log("Received img!");
+            console.log(amount);
+            swal({
+                title: 'Promotion Available!',
+                imageUrl: "http://beaconapp-abdallahozaifa.c9users.io:8080/" + amount,
+                imageWidth: 400,
+                imageHeight: 200,
+                animation: true,
+                showCloseButton: true,
+                html: $('<div>')
+                    .addClass('animated wobble')
+                    .text('A new promotion is available.'),
+            });
         }
         reqArr[0].stop();
     }

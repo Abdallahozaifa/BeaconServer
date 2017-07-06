@@ -24,7 +24,7 @@ eventEmitter.setMaxListeners(1);
 var messageCount = 0;
 var setEvent = false;
 
-var globalAmount;
+var globalAmount=null;
 app.get('/event', function(req, res) {
     var displayGeneralAtm = function displayGeneralAtm() {
         messageCount++;
@@ -70,7 +70,8 @@ app.get('/event', function(req, res) {
             res.write("data: " + img + "\n");
             res.write("data: " + globalAmount + "\n\n");
         }else{
-            res.write("data: " + img + "\n\n");
+            res.write("data: " + img + "\n");
+            res.write("data: " + "assets/images/ATMPromotions/chasecard.png" + "\n\n");
         }
         res.write("retry: 1000\n");
         res.write('\n');
@@ -87,7 +88,8 @@ app.get('/event', function(req, res) {
             res.write("data: " + img + "\n");
             res.write("data: " + globalAmount + "\n\n");
         }else{
-            res.write("data: " + img + "\n\n");
+            res.write("data: " + img + "\n");
+            res.write("data: " + "assets/images/ATMPromotions/brewery.gif" + "\n\n");
         }
         res.write("retry: 1000\n");
         res.write('\n');
@@ -104,7 +106,8 @@ app.get('/event', function(req, res) {
             res.write("data: " + img + "\n");
             res.write("data: " + globalAmount + "\n\n");
         }else{
-            res.write("data: " + img + "\n\n");
+            res.write("data: " + img + "\n");
+            res.write("data: " + "assets/images/ATMPromotions/saphhirecard.png" + "\n\n");
         }
         res.write("retry: 1000\n")
         res.write('\n');
