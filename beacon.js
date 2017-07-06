@@ -94,15 +94,7 @@ app.get('/event', function(req, res) {
         "Cache-Control": "no-cache",
         "Connection": "keep-alive"
     });
-    res.write('\n');
-    // interval = setInterval(function() {
-    //     //res.write("data: " + "Hello From Server!" + "\n\n");
-    //     //eventEmitter.emit('farProximity');
-    // }, 1000);
-    // req.connection.addListener("close", function() {
-    //     clearInterval(interval);
-    //     res.end();
-    // }, false);
+    
 });
 
 app.get('/atm', function(req, res) {
@@ -134,20 +126,20 @@ app.post('/beaconInfo', function(req, res) {
     // //if()
     // eventEmitter.on('HozaifaApproach');
     console.log(req.body.name);
-    console.log(req.body.rank);
+    //console.log(req.body.rank);
     var name = req.body.name;
-    var rank = req.body.rank;
+    //var rank = req.body.rank;
     
     /* Sean Approach */
-    if (name == "Sean" && rank == 0) {
+    if (name == "Sean") {
         console.log("Hitting Sean Approach!");
         eventEmitter.emit('SeanApproach');
     }
-    else if (name == "Sean" && rank == 1) {
-        eventEmitter.emit("closeProximity");
+    else if (name == "Brendon") {
+        eventEmitter.emit("BrendonApproach");
     }
     else {
-        eventEmitter.emit("farProximity");
+        eventEmitter.emit("HozaifaApproach");
     }
 
 
