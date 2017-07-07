@@ -1,8 +1,9 @@
+/* global Image, $, swal */
 var appImg = $("#appImg");
-console.log(appImg);
 var options = {};
 var reqArr = [];
 
+/* Function that preloads the images into the cache when the page loads*/
 var preloadImages = function(array) {
     if (!preloadImages.list) {
         preloadImages.list = [];
@@ -17,7 +18,7 @@ var preloadImages = function(array) {
                 // for memory consumption reasons
                 list.splice(index, 1);
             }
-        }
+        };
         list.push(img);
         img.src = array[i];
     }
@@ -41,16 +42,6 @@ options.onEnd = function(e) {
     reqArr[0].start();
 };
 
-var IsJsonString = function(str) {
-    try {
-        JSON.parse(str);
-    }
-    catch (e) {
-        return false;
-    }
-    return true;
-};
-
 var isNumeric = function(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 };
@@ -62,36 +53,36 @@ options.events = {
         var img = dataArr[0];
         var amount = dataArr[1];
 
-        appImg.fadeOut(300, function() {
+        appImg.fadeOut(1000, function() {
             $(this).attr('src', img).bind('onreadystatechange load', function() {
-                if (this.complete) $(this).fadeIn(300);
+                if (this.complete) $(this).fadeIn(300, function() {
+                    if (isNumeric(amount) == true) {
+                        swal(
+                            'Transaction Completed!',
+                            "$" + amount + ".00" + ' has been Withdrawn!',
+                            'success'
+                        );
+                    }
+                    else {
+                        console.log("Received img!");
+                        console.log(amount);
+                        if (amount != undefined) {
+                            swal({
+                                title: 'Promotion Available!',
+                                imageUrl: "http://beaconapp-abdallahozaifa.c9users.io:8080/" + amount,
+                                imageWidth: 400,
+                                imageHeight: 200,
+                                animation: true,
+                                showCloseButton: true,
+                                html: $('<div>')
+                                    .addClass('animated wobble')
+                                    .text('A new promotion is available.'),
+                            });
+                        }
+                    }
+                });
             });
         });
-        
-        if (isNumeric(amount) == true) {
-            swal(
-                'Transaction Completed!',
-                "$" + amount + ".00" + ' has been Withdrawn!',
-                'success'
-            );
-        }
-        else {
-            console.log("Received img!");
-            console.log(amount);
-            if (amount != undefined) {
-                swal({
-                    title: 'Promotion Available!',
-                    imageUrl: "http://beaconapp-abdallahozaifa.c9users.io:8080/" + amount,
-                    imageWidth: 400,
-                    imageHeight: 200,
-                    animation: true,
-                    showCloseButton: true,
-                    html: $('<div>')
-                        .addClass('animated wobble')
-                        .text('A new promotion is available.'),
-                });
-            }
-        }
         reqArr[0].stop();
     }
 };
