@@ -3,18 +3,33 @@ console.log(appImg);
 var options = {};
 var reqArr = [];
 
-var welcomeAtmImg = new Image();
-welcomeAtmImg.src = "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/images/ATMWelcome/ATMGeneralWelcome.png";
-var generalAtmImg = new Image();
-generalAtmImg.src = "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/images/ATMWelcome/ATMBlank.PNG";
-var HozaifaWelcomeImg = new Image();
-HozaifaWelcomeImg.src = "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/images/ATMGreeting/ATMWelcomeHozaifa.png";
-var BrendonWelcomeImg = new Image();
-BrendonWelcomeImg.src = "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/images/ATMGreeting/ATMWelcomeBrendon.png";
-var SeanWelcomeImg = new Image();
-BrendonWelcomeImg.src = "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/images/ATMGreeting/ATMWelcomeSean.png";
+var preloadImages = function(array) {
+    if (!preloadImages.list) {
+        preloadImages.list = [];
+    }
+    var list = preloadImages.list;
+    for (var i = 0; i < array.length; i++) {
+        var img = new Image();
+        img.onload = function() {
+            var index = list.indexOf(this);
+            if (index !== -1) {
+                // remove image from the array once it's loaded
+                // for memory consumption reasons
+                list.splice(index, 1);
+            }
+        }
+        list.push(img);
+        img.src = array[i];
+    }
+};
 
-console.log(welcomeAtmImg);
+preloadImages([
+    "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/images/ATMWelcome/ATMGeneralWelcome.png",
+    "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/images/ATMWelcome/ATMBlank.PNG",
+    "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/images/ATMGreeting/ATMWelcomeHozaifa.png",
+    "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/images/ATMGreeting/ATMWelcomeBrendon.png",
+    "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/images/ATMGreeting/ATMWelcomeSean.png"
+]);
 
 options.onOpen = function(e) {
     console.log("Connection Open");
@@ -46,7 +61,13 @@ options.events = {
         var dataArr = e.data.split('\n');
         var img = dataArr[0];
         var amount = dataArr[1];
-        appImg.attr("src", img);
+
+        appImg.fadeOut(300, function() {
+            $(this).attr('src', img).bind('onreadystatechange load', function() {
+                if (this.complete) $(this).fadeIn(300);
+            });
+        });
+        
         if (isNumeric(amount) == true) {
             swal(
                 'Transaction Completed!',
@@ -57,17 +78,19 @@ options.events = {
         else {
             console.log("Received img!");
             console.log(amount);
-            swal({
-                title: 'Promotion Available!',
-                imageUrl: "http://beaconapp-abdallahozaifa.c9users.io:8080/" + amount,
-                imageWidth: 400,
-                imageHeight: 200,
-                animation: true,
-                showCloseButton: true,
-                html: $('<div>')
-                    .addClass('animated wobble')
-                    .text('A new promotion is available.'),
-            });
+            if (amount != undefined) {
+                swal({
+                    title: 'Promotion Available!',
+                    imageUrl: "http://beaconapp-abdallahozaifa.c9users.io:8080/" + amount,
+                    imageWidth: 400,
+                    imageHeight: 200,
+                    animation: true,
+                    showCloseButton: true,
+                    html: $('<div>')
+                        .addClass('animated wobble')
+                        .text('A new promotion is available.'),
+                });
+            }
         }
         reqArr[0].stop();
     }
