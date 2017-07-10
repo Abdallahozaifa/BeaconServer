@@ -5,10 +5,13 @@ var app = express();
 var bodyParser = require("body-parser");
 var events = require('events');
 var eventEmitter = new events.EventEmitter();
-var count = 0;
 var messageCount = 0;
-var setEvent = false;
 var globalAmount = null;
+var MongoClient = require('mongodb').MongoClient;
+var url = 'mongodb://localhost:27017/beacon';
+var ObjectId = require('mongodb').ObjectID;
+var assert = require('assert');
+var Customer = require('./server_modules/Customer');
 eventEmitter.setMaxListeners(0);
 
 /**/
@@ -22,6 +25,12 @@ app.use('/assets', express.static('assets'));
 app.use('/bower_components', express.static('bower_components'));
 app.use('/atm.js', express.static('atm.js'));
 
+// Connecting to Mongo Database Server 
+MongoClient.connect(url, function(err, db) {
+    assert.equal(null, err);
+    console.log("Connected correctly to server.");
+    db.close();
+});
 /* HTTP Request handlers */
 app.get('/', function(req, res) {
     console.log("Received request from user Agent: " + req.headers["user-agent"]);
@@ -49,7 +58,7 @@ app.get('/event', function(req, res) {
         res.write("retry: 1000\n");
         res.write('\n');
         console.log("Sent:  " + img);
-    }
+    };
 
     var displayWelcomeAtm = function displayWelcomeAtm() {
         messageCount++;
@@ -67,7 +76,7 @@ app.get('/event', function(req, res) {
         res.write("retry: 1000\n");
         res.write('\n');
         console.log("Sent:  " + img);
-    }
+    };
 
     var displayHozaifaWelcome = function() {
         messageCount++;
@@ -86,7 +95,7 @@ app.get('/event', function(req, res) {
         res.write("retry: 1000\n");
         res.write('\n');
         console.log("Sent:  " + img);
-    }
+    };
 
     var displayBrendonWelcome = function() {
         messageCount++;
@@ -105,7 +114,7 @@ app.get('/event', function(req, res) {
         res.write("retry: 1000\n");
         res.write('\n');
         console.log("Sent:  " + img);
-    }
+    };
 
     var displaySeanWelcome = function() {
         messageCount++;
@@ -121,10 +130,10 @@ app.get('/event', function(req, res) {
             res.write("data: " + img + "\n");
             res.write("data: " + "assets/images/ATMPromotions/saphhirecard.png" + "\n\n");
         }
-        res.write("retry: 1000\n")
+        res.write("retry: 1000\n");
         res.write('\n');
         console.log("Sent:  " + img);
-    }
+    };
 
     // eventEmitter.on('refreshPg', refreshPg);
     eventEmitter.on('farProximity', displayGeneralAtm);
@@ -163,12 +172,14 @@ app.get('/sendGeneral', function(req, res) {
 //     res.send(null);
 //     res.end();
 // });
-
+app.post('/queue', function(req, res) {
+    
+});
 app.post('/beaconInfo', function(req, res) {
 
     var name = req.body.name;
     var amount = req.body.amount;
-    
+
     /* Sean Approach */
     if (name == "Sean" && amount == undefined) {
         globalAmount = null;
