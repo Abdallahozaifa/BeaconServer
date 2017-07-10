@@ -12,6 +12,7 @@ var url = 'mongodb://localhost:27017/beacon';
 var ObjectId = require('mongodb').ObjectID;
 var assert = require('assert');
 var Customer = require('./server_modules/Customer');
+var customers = [];
 eventEmitter.setMaxListeners(0);
 
 /**/
@@ -25,12 +26,6 @@ app.use('/assets', express.static('assets'));
 app.use('/bower_components', express.static('bower_components'));
 app.use('/atm.js', express.static('atm.js'));
 
-// Connecting to Mongo Database Server 
-MongoClient.connect(url, function(err, db) {
-    assert.equal(null, err);
-    console.log("Connected correctly to server.");
-    db.close();
-});
 /* HTTP Request handlers */
 app.get('/', function(req, res) {
     console.log("Received request from user Agent: " + req.headers["user-agent"]);
@@ -172,9 +167,67 @@ app.get('/sendGeneral', function(req, res) {
 //     res.send(null);
 //     res.end();
 // });
-app.post('/queue', function(req, res) {
+var clearDatabase = function() {
+    MongoClient.connect(url, function(err, db) {
+        assert.equal(null, err);
+        console.log("Connected correctly to server.");
+        Customer.removeAllCustomers(db);
+        customers = [];
+        db.close();
+    });
+};
+
+var findAllCustomers = function() {
+    MongoClient.connect(url, function(err, db) {
+        assert.equal(null, err);
+        console.log("Connected correctly to server.");
+        Customer.findAllCustomers(db, function(customer) {
+            console.log(customer);
+            //customers.push(customer);
+            db.close();
+        });
+    });
+};
+
+app.get('/tvscreen',function(req, res) {
     
 });
+clearDatabase();
+
+var wtCount = 2;
+var queueNm = 1;
+app.post('/queue', function(req, res) {
+    var customer = {
+        name: req.body.name,
+        actNm: req.body.account,
+        waitTime: wtCount,
+        queueNum: queueNm
+    };
+    
+    wtCount+= 2;
+    queueNm++;
+    
+    /* Connecting to the database server */
+    MongoClient.connect(url, function(err, db) {
+        assert.equal(null, err);
+        console.log("Connected correctly to server.");
+
+        /* Insert the customer into the database */
+        Customer.insertCustomer(db, customer, function() {
+            console.log(customer.name + " was successfully Added to the database!");
+            /* Find all the customers once they are inserted!*/
+            res.send(JSON.stringify(customer));
+            db.close();
+            // Customer.findAllCustomers(db, function(customer) {
+            //     console.log(customer);
+            //     res.send(JSON.stringify(customer));
+            //     db.close();
+            // });
+        });
+    });
+    
+});
+
 app.post('/beaconInfo', function(req, res) {
 
     var name = req.body.name;
