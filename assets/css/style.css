@@ -1,5 +1,5 @@
 body{
-    background-color: black; 
+    background-color: white; 
     width: 1755px;
     height: 976px; 
 }
@@ -66,8 +66,58 @@ body{
     height: 22px; 
 }
 
-#video, #canvas{
+#video, #exampleCanvas{
     position: absolute; 
-    top: 68.1%;
-    left: 34.0%;
+    top: 7.1%;
+    left: 16.0%;
+    background: white;
+}
+
+#exampleCanvas{
+    width: 1272px; 
+    height: 720px;
+}
+
+h2.header { 
+   position: absolute; 
+   top: 10%; 
+   left: 30%; 
+   width: 100%; 
+}
+
+h2.comp { 
+   position: absolute; 
+   /*top: 25%; */
+   left: 36.5%; 
+   width: 100%; 
+}
+
+h2.header span { 
+   color: white; 
+   font: bold 72px Helvetica, Sans-Serif; 
+   letter-spacing: -1px;  
+   background: rgb(0, 0, 0); /* fallback color */
+   background: rgba(0, 0, 0, 0.7);
+   border-radius: 15px;
+   padding: 10px; 
+}
+
+h2.comp span { 
+   color: white; 
+   font: bold 45px Helvetica, Sans-Serif; 
+   letter-spacing: -1px;  
+   background: rgb(0, 0, 0); /* fallback color */
+   background: rgba(0, 0, 0, 0.7);
+   border-radius: 15px;
+   padding: 10px; 
+}
+
+h2 span.spacer {
+   padding:0 5px;
+   margin-top: 15%;
+}
+
+h2 span.spacer2 {
+   padding:0 5px;
+   margin-top: 5%;
 }

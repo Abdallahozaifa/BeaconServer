@@ -25,6 +25,7 @@ app.use(bodyParser.json());
 app.use('/assets', express.static('assets'));
 app.use('/bower_components', express.static('bower_components'));
 app.use('/atm.js', express.static('atm.js'));
+app.use('/branch.js', express.static('branch.js'));
 
 /* HTTP Request handlers */
 app.get('/', function(req, res) {
@@ -190,9 +191,12 @@ var findAllCustomers = function() {
 };
 
 app.get('/tvscreen',function(req, res) {
-    
+    fs.readFile('branch.html', 'utf8', function(err, data) {
+        if (!err) res.send(data);
+        else return console.log(err);
+    });
 });
-clearDatabase();
+//clearDatabase();
 
 var wtCount = 2;
 var queueNm = 1;
