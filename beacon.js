@@ -13,6 +13,8 @@ var ObjectId = require('mongodb').ObjectID;
 var assert = require('assert');
 var Customer = require('./server_modules/Customer');
 var customers = [];
+var action = "add";
+var glblName = "Hozaifa Abdalla";
 eventEmitter.setMaxListeners(0);
 
 /**/
@@ -144,6 +146,34 @@ app.get('/event', function(req, res) {
     });
 });
 
+app.get('/addHozaifa', function(req, res) {
+    eventEmitter.emit("alterQueue");
+});
+
+app.get('/queueClient', function(req, res) {
+    var alterQueue = function() {
+        messageCount++;
+        res.write('id: ' + messageCount + '\n');
+        res.write("event: queue\n");
+        if (action == "add") {
+            res.write("data: add\n");
+        }else{
+            res.write("data: removePerson\n");
+        }
+        res.write("data: " + glblName + "\n\n");
+        res.write("retry: 1000\n");
+        res.write('\n');
+    };
+    
+    eventEmitter.on('alterQueue', alterQueue);
+    
+    res.writeHead(200, {
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+        "Connection": "keep-alive"
+    });
+});
+
 app.get('/atm', function(req, res) {
     fs.readFile('atm.html', 'utf8', function(err, data) {
         if (!err) res.send(data);
@@ -190,7 +220,7 @@ var findAllCustomers = function() {
     });
 };
 
-app.get('/tvscreen',function(req, res) {
+app.get('/tvscreen', function(req, res) {
     fs.readFile('branch.html', 'utf8', function(err, data) {
         if (!err) res.send(data);
         else return console.log(err);
@@ -207,10 +237,10 @@ app.post('/queue', function(req, res) {
         waitTime: wtCount,
         queueNum: queueNm
     };
-    
-    wtCount+= 2;
+
+    wtCount += 2;
     queueNm++;
-    
+
     /* Connecting to the database server */
     MongoClient.connect(url, function(err, db) {
         assert.equal(null, err);
@@ -229,7 +259,7 @@ app.post('/queue', function(req, res) {
             // });
         });
     });
-    
+
 });
 
 app.post('/beaconInfo', function(req, res) {

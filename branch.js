@@ -15,7 +15,6 @@ $(document).ready(function() {
         h2.append(span);
         $(span).html(txt);
         $(container).append(h2);
-        //personArr.push(txt);
         yPosTop += 10;
     };
 
@@ -45,14 +44,7 @@ $(document).ready(function() {
     var addPerson = function(name){
         personArr.push(name);
         genList();
-    }
-    addPerson("Hozaifa Abdalla");
-    addPerson("Sean Kirkland");
-    addPerson("Brendon James");
-    genList();
-    removePerson("Hozaifa Abdalla");
-    addPerson("Sean Kirkland");
-    addPerson("Sean dfgd");
+    };
 
     options.onOpen = function(e) {
         console.log("Connection Open");
@@ -60,17 +52,26 @@ $(document).ready(function() {
 
     options.onEnd = function(e) {
         console.log("Connection Closed");
-        reqArr[0] = $.SSE('http://beaconapp-abdallahozaifa.c9users.io:8080/queue', options);
+        reqArr[0] = $.SSE('http://beaconapp-abdallahozaifa.c9users.io:8080/queueClient', options);
         reqArr[0].start();
     };
 
     options.events = {
-        beacon: function(e) {
-            console.log("Received Data from Center");
+        queue: function(e) {
+            console.log("Received Data from Server");
+            var dataArr = e.data.split('\n');
+            console.log(dataArr);
+            var action = dataArr[0];
+            var name = dataArr[1];
+            if(action == "add"){
+                addPerson(name);
+            }else{
+                removePerson(name);
+            }
         }
     };
 
-    var sse = $.SSE('http://beaconapp-abdallahozaifa.c9users.io:8080/event', options);
+    var sse = $.SSE('http://beaconapp-abdallahozaifa.c9users.io:8080/queueClient', options);
     reqArr.push(sse);
-    //sse.start();
+    sse.start();
 });
