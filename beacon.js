@@ -13,8 +13,8 @@ var ObjectId = require('mongodb').ObjectID;
 var assert = require('assert');
 var Customer = require('./server_modules/Customer');
 var customers = [];
-var action = "add";
-var glblName = "Hozaifa Abdalla";
+var action = "";
+var glblName = "";
 eventEmitter.setMaxListeners(0);
 
 /**/
@@ -152,21 +152,35 @@ app.get('/addHozaifa', function(req, res) {
 
 app.get('/queueClient', function(req, res) {
     var alterQueue = function() {
-        messageCount++;
-        res.write('id: ' + messageCount + '\n');
-        res.write("event: queue\n");
-        if (action == "add") {
-            res.write("data: add\n");
-        }else{
-            res.write("data: removePerson\n");
-        }
-        res.write("data: " + glblName + "\n\n");
-        res.write("retry: 1000\n");
-        res.write('\n');
+        var dbPrsArr = [];
+        var customerCnt = 1;
+        MongoClient.connect(url, function(err, db) {
+            assert.equal(null, err);
+            console.log("Connected correctly to server.");
+            db.collection('customers').count(function(err, cnt) {
+                assert.equal(null, err);
+                Customer.findAllCustomers(db, function(customer) {
+                    console.log(customer);
+                    dbPrsArr.push(customer);
+                    messageCount++;
+                    if (customerCnt == cnt) {
+                        res.write('id: ' + messageCount + '\n');
+                        res.write("event: queue\n");
+                        res.write("data: " + JSON.stringify(dbPrsArr) + "\n\n");
+                        res.write("retry: 1000\n");
+                        res.write('\n');
+                    }
+                    else {
+                        customerCnt++;
+                    }
+                    db.close();
+                });
+            })
+        });
     };
-    
+
     eventEmitter.on('alterQueue', alterQueue);
-    
+
     res.writeHead(200, {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",
@@ -251,14 +265,11 @@ app.post('/queue', function(req, res) {
             console.log(customer.name + " was successfully Added to the database!");
             /* Find all the customers once they are inserted!*/
             res.send(JSON.stringify(customer));
+            eventEmitter.emit("alterQueue");
             db.close();
-            // Customer.findAllCustomers(db, function(customer) {
-            //     console.log(customer);
-            //     res.send(JSON.stringify(customer));
-            //     db.close();
-            // });
         });
     });
+    
 
 });
 

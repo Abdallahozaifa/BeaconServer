@@ -6,6 +6,24 @@ $(document).ready(function() {
     var reqArr = [];
     var personArr = [];
 
+    $("body").css("background", "white");
+    $(".header").hide();
+    setTimeout(function() {
+        $(".header").show();
+        $(".header").textillate({
+            loop: true,
+            in: {
+                effect: 'tada',
+                delayScale: 1,
+                delay: 150,
+                shuffle: true
+            },
+            out: {
+                effect: 'flipOutY',
+                reverse: true
+            }
+        });
+    }, 1100);
     /* Creates a component on the page */
     var createComp = function(txt) {
         var h2 = document.createElement("h2");
@@ -30,9 +48,9 @@ $(document).ready(function() {
     };
 
     var removePerson = function(name) {
-        var indx, cnt=0;
+        var indx, cnt = 0;
         personArr.forEach(function(nm) {
-            if(name == nm){
+            if (name == nm) {
                 indx = cnt;
             }
             cnt++;
@@ -40,8 +58,8 @@ $(document).ready(function() {
         personArr.splice(indx, 1);
         genList();
     };
-    
-    var addPerson = function(name){
+
+    var addPerson = function(name) {
         personArr.push(name);
         genList();
     };
@@ -59,15 +77,14 @@ $(document).ready(function() {
     options.events = {
         queue: function(e) {
             console.log("Received Data from Server");
-            var dataArr = e.data.split('\n');
-            console.log(dataArr);
-            var action = dataArr[0];
-            var name = dataArr[1];
-            if(action == "add"){
-                addPerson(name);
-            }else{
-                removePerson(name);
-            }
+            var data = e.data;
+            console.log(data);
+            var prsArr = JSON.parse(data);
+            console.log(prsArr);
+            personArr = [];
+            prsArr.forEach(function(person) {
+                addPerson(person.name);
+            });
         }
     };
 
