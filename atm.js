@@ -5,6 +5,14 @@ $(document).ready(function() {
     var reqArr = [];
     var billYTop = 80;
 
+    function sleep(milliseconds) {
+        var start = new Date().getTime();
+        for (var i = 0; i < 1e7; i++) {
+            if ((new Date().getTime() - start) > milliseconds) {
+                break;
+            }
+        }
+    }
     var createBill = function(bill) {
         var img = document.createElement("img");
         if (bill == "100") {
@@ -24,6 +32,7 @@ $(document).ready(function() {
         img.className = "money";
         $(img).css("top", billYTop + "%");
         $("body").append(img);
+        $(img).addClass("animated bounceInDown");
         billYTop += 4;
     };
 
@@ -55,6 +64,8 @@ $(document).ready(function() {
         var bills = calculateChange(amount);
         var mnyCnt = 0;
         var crntBill;
+        var billsArr = [];
+        var time = 1000;
         bills.forEach(function(bill) {
             if (bill > 0) {
                 switch (mnyCnt) {
@@ -65,25 +76,30 @@ $(document).ready(function() {
                         crntBill = 50;
                         break;
                     case 2:
-                        crntBill = 20
+                        crntBill = 20;
                         break;
                     case 3:
                         crntBill = 10;
                         break;
                 }
-                for(var i=0; i<bill; i++){
-                    createBill(crntBill);
-                }
 
+                console.log(crntBill)
+                for (var i = 0; i < bill; i++) {
+                    billsArr.push(crntBill);
+                }
             }
             mnyCnt++;
         });
+        billsArr.forEach(function(money) {
+            setTimeout(function() {
+                createBill(money);
+            }, time);
+            time += 1000;
+        });
+        console.log(billsArr);
     };
     displayChange(460);
-    // createBill("100");
-    // createBill("50");
-    // createBill("20");
-    // createBill("10");
+
     /* Function that preloads the images into the cache when the page loads*/
     var preloadImages = function(array) {
         if (!preloadImages.list) {
