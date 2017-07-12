@@ -179,8 +179,8 @@ $(document).ready(function() {
                                     clearTimeout(scrollTimeOut);
                                     $(".money").addClass("animated bounceOutDown");
                                     billYTop = 80;
-                                    setTimeout(function(){
-                                        window.location.reload();    
+                                    setTimeout(function() {
+                                        window.location.reload();
                                     }, 3000);
                                 }, time);
                             }, 3400);
@@ -199,7 +199,11 @@ $(document).ready(function() {
                                     html: $('<div>')
                                         .addClass('animated wobble')
                                         .text('A new promotion is available.'),
+                                    timer: 3000
                                 });
+                                setTimeout(function() {
+                                    window.location.reload();
+                                }, 3000);
                             }
                         }
                     });

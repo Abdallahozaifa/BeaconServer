@@ -72,11 +72,11 @@ $(document).ready(function() {
         });
         console.log($(".comp"));
         $($(".comp")[indxSelected]).addClass('animated infinite flash');
-        setTimeout(function(){
-            $(".comp")[indxSelected].remove();
-            removePerson("Hozaifa Abdalla");
-            genList();
-        }, 5000);
+        // setTimeout(function(){
+        //     $(".comp")[indxSelected].remove();
+        //     removePerson("Hozaifa Abdalla");
+        //     genList();
+        // }, 5000);
     };
     // flashAndRemoveNameAnimate("Hozaifa Abdalla");
     
@@ -99,8 +99,10 @@ $(document).ready(function() {
             var prsArr = JSON.parse(data);
             console.log(prsArr);
             personArr = [];
+            console.log(personArr);
             prsArr.forEach(function(person) {
                 addPerson(person.name);
+                flashAndRemoveNameAnimate(prsArr[0].name);
             });
         },
         usrSelected: function(e){
