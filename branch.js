@@ -102,6 +102,10 @@ $(document).ready(function() {
             prsArr.forEach(function(person) {
                 addPerson(person.name);
             });
+        },
+        usrSelected: function(e){
+            var data = e.data;
+            flashAndRemoveNameAnimate(data);
         }
     };
 

@@ -3,7 +3,87 @@ $(document).ready(function() {
     var appImg = $("#appImg");
     var options = {};
     var reqArr = [];
+    var billYTop = 80;
 
+    var createBill = function(bill) {
+        var img = document.createElement("img");
+        if (bill == "100") {
+            img.src = "assets/images/money/100dollar.jpg";
+        }
+        else if (bill == "50") {
+            img.src = "assets/images/money/50dollar.jpg";
+        }
+        else if (bill == "20") {
+            img.src = "assets/images/money/20dollar.jpg"
+        }
+        else if (bill == "10") {
+            img.src = "assets/images/money/10dollar.jpg"
+        }
+        $(img).css("width", "300px");
+        $(img).css("height", "126px");
+        img.className = "money";
+        $(img).css("top", billYTop + "%");
+        $("body").append(img);
+        billYTop += 4;
+    };
+
+
+    var calculateChange = function(amount) {
+        var total, currentBill;
+        var bills = [];
+
+        currentBill = Math.floor(amount / 100);
+        bills.push(currentBill);
+        total = amount - (currentBill * 100);
+
+        currentBill = Math.floor(total / 50);
+        bills.push(currentBill);
+        total = total - (currentBill * 50);
+
+
+        currentBill = Math.floor(total / 20);
+        bills.push(currentBill);
+        total = total - (currentBill * 20);
+
+        currentBill = Math.floor(total / 10);
+        bills.push(currentBill);
+        total = total - (currentBill * 10);
+        return bills;
+    };
+
+    var displayChange = function(amount) {
+        var bills = calculateChange(amount);
+        var mnyCnt = 0;
+        var crntBill;
+        bills.forEach(function(bill) {
+            if (bill > 0) {
+                switch (mnyCnt) {
+                    case 0:
+                        crntBill = 100;
+                        break;
+                    case 1:
+                        crntBill = 50;
+                        break;
+                    case 2:
+                        crntBill = 20
+                        break;
+                    case 3:
+                        crntBill = 10;
+                        break;
+                }
+                for(var i=0; i<bill; i++){
+                    createBill(crntBill);
+                }
+
+            }
+            mnyCnt++;
+        });
+    };
+    displayChange(460);
+    // createBill("100");
+    // createBill("50");
+    // createBill("20");
+    // createBill("10");
     /* Function that preloads the images into the cache when the page loads*/
     var preloadImages = function(array) {
         if (!preloadImages.list) {
