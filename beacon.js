@@ -6,7 +6,7 @@ var bodyParser = require("body-parser");
 var events = require('events');
 var eventEmitter = new events.EventEmitter();
 var messageCount = 0;
-var globalAmount = null;
+var globalAmount = 450;
 var MongoClient = require('mongodb').MongoClient;
 var url = 'mongodb://localhost:27017/beacon';
 var ObjectId = require('mongodb').ObjectID;
@@ -148,6 +148,13 @@ app.get('/event', function(req, res) {
 
 app.get('/addHozaifa', function(req, res) {
     eventEmitter.emit("alterQueue");
+});
+
+app.get('/moneyTest', function(req, res){
+   console.log("Received request");
+   eventEmitter.emit("HozaifaApproach"); 
+   res.send(null);
+   res.end();
 });
 
 app.get('/queueClient', function(req, res) {

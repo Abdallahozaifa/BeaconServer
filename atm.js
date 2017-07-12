@@ -4,6 +4,8 @@ $(document).ready(function() {
     var options = {};
     var reqArr = [];
     var billYTop = 80;
+    var scrollTimeOut;
+    var time = 1000;
 
     function sleep(milliseconds) {
         var start = new Date().getTime();
@@ -32,7 +34,7 @@ $(document).ready(function() {
         img.className = "money";
         $(img).css("top", billYTop + "%");
         $("body").append(img);
-        $(img).addClass("animated bounceInDown");
+        // $(img).addClass("animated bounceInDown");
         billYTop += 4;
     };
 
@@ -65,7 +67,6 @@ $(document).ready(function() {
         var mnyCnt = 0;
         var crntBill;
         var billsArr = [];
-        var time = 1000;
         bills.forEach(function(bill) {
             if (bill > 0) {
                 switch (mnyCnt) {
@@ -98,7 +99,16 @@ $(document).ready(function() {
         });
         console.log(billsArr);
     };
-    displayChange(460);
+
+    function pageScroll() {
+        window.scrollBy(0, 1);
+        scrollTimeOut = setTimeout(pageScroll, 10);
+    }
+    // pageScroll();
+    // displayChange(1000);
+    // setTimeout(function(){
+    //     clearTimeout(scrollTimeOut);
+    // }, time);
 
     /* Function that preloads the images into the cache when the page loads*/
     var preloadImages = function(array) {
@@ -154,11 +164,26 @@ $(document).ready(function() {
                 $(this).attr('src', img).bind('onreadystatechange load', function() {
                     if (this.complete) $(this).fadeIn(300, function() {
                         if (isNumeric(amount) == true) {
-                            swal(
-                                'Transaction Completed!',
-                                "$" + amount + ".00" + ' has been Withdrawn!',
-                                'success'
-                            );
+                            // swal(
+                            //     'Transaction Receipt!',
+                            //     "$" + amount + ".00" + ' will be Withdrawn!',
+                            //     'success'
+                            // );
+                            swal({
+                                title: "Transaction Receipt",
+                                type: 'success',
+                                text: "$" + amount + ".00" + ' will be Withdrawn!',
+                                timer: 3000
+                            });
+
+                            setTimeout(function() {
+                                displayChange(amount);
+                                pageScroll();
+                                setTimeout(function() {
+                                    clearTimeout(scrollTimeOut);
+                                    $(".money").addClass("animated bounceOutDown");
+                                }, time);
+                            }, 3200);
                         }
                         else {
                             console.log("Received img!");
