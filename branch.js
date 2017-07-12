@@ -58,9 +58,9 @@ $(document).ready(function() {
         personArr.push(name);
         genList();
     };
-    addPerson("Hozaifa Abdalla");
-    addPerson("Sean Kirkland");
-    addPerson("Brendon James");
+    // addPerson("Hozaifa Abdalla");
+    // addPerson("Sean Kirkland");
+    // addPerson("Brendon James");
     
     var flashAndRemoveNameAnimate = function(name){
         var indx=0, indxSelected;
@@ -78,7 +78,7 @@ $(document).ready(function() {
             genList();
         }, 5000);
     };
-    flashAndRemoveNameAnimate("Hozaifa Abdalla");
+    // flashAndRemoveNameAnimate("Hozaifa Abdalla");
     
 
     options.onOpen = function(e) {

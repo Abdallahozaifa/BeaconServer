@@ -101,14 +101,10 @@ $(document).ready(function() {
     };
 
     function pageScroll() {
+        $('body').scrollTop(0);
         window.scrollBy(0, 1);
         scrollTimeOut = setTimeout(pageScroll, 10);
     }
-    // pageScroll();
-    // displayChange(1000);
-    // setTimeout(function(){
-    //     clearTimeout(scrollTimeOut);
-    // }, time);
 
     /* Function that preloads the images into the cache when the page loads*/
     var preloadImages = function(array) {
@@ -182,8 +178,12 @@ $(document).ready(function() {
                                 setTimeout(function() {
                                     clearTimeout(scrollTimeOut);
                                     $(".money").addClass("animated bounceOutDown");
+                                    billYTop = 80;
+                                    setTimeout(function(){
+                                        window.location.reload();    
+                                    }, 3000);
                                 }, time);
-                            }, 3200);
+                            }, 3400);
                         }
                         else {
                             console.log("Received img!");

@@ -6,7 +6,7 @@ var bodyParser = require("body-parser");
 var events = require('events');
 var eventEmitter = new events.EventEmitter();
 var messageCount = 0;
-var globalAmount = 450;
+var globalAmount = null;
 var MongoClient = require('mongodb').MongoClient;
 var url = 'mongodb://localhost:27017/beacon';
 var ObjectId = require('mongodb').ObjectID;
@@ -284,34 +284,35 @@ app.post('/beaconInfo', function(req, res) {
 
     var name = req.body.name;
     var amount = req.body.amount;
-
+    console.log(req.body);
+    console.log("Received Sean request!");
     /* Sean Approach */
-    if (name == "Sean" && amount == undefined) {
+    if (name == "Sean Kirkland" && amount == undefined) {
         globalAmount = null;
         eventEmitter.emit('SeanApproach');
     }
-    else if (name == "Sean" && amount != null) {
+    else if (name == "Sean Kirkland" && amount != null) {
         // display transaction amount and welcome sean
         globalAmount = amount;
         eventEmitter.emit('SeanApproach');
     }
 
     /* Brendon Approach */
-    if (name == "Brendon" && amount == undefined) {
+    if (name == "Brendon James" && amount == undefined) {
         globalAmount = null;
         eventEmitter.emit('BrendonApproach');
     }
-    else if (name == "Brendon" && amount != null) {
+    else if (name == "Brendon James" && amount != null) {
         globalAmount = amount;
         eventEmitter.emit('BrendonApproach');
     }
 
     /* Hozaifa Approach */
-    if (name == "Hozaifa" && amount == undefined) {
+    if (name == "Hozaifa Abdalla" && amount == undefined) {
         globalAmount = null;
         eventEmitter.emit('HozaifaApproach');
     }
-    else if (name == "Hozaifa" && amount != null) {
+    else if (name == "Hozaifa Abdalla" && amount != null) {
         // display transaction amount and welcome sean
         globalAmount = amount;
         eventEmitter.emit('HozaifaApproach');
