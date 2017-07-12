@@ -1,6 +1,6 @@
 /* global $ */
 $(document).ready(function() {
-    var yPosTop = 25;
+    var yPosTop = 30;
     var container = $(".ATM-Pic")[0];
     var options = {};
     var reqArr = [];
@@ -11,16 +11,11 @@ $(document).ready(function() {
     setTimeout(function() {
         $(".header").show();
         $(".header").textillate({
-            loop: true,
             in: {
-                effect: 'tada',
+                effect: 'rotateIn',
                 delayScale: 1,
                 delay: 150,
                 shuffle: true
-            },
-            out: {
-                effect: 'flipOutY',
-                reverse: true
             }
         });
     }, 1100);
@@ -38,7 +33,7 @@ $(document).ready(function() {
 
     var genList = function() {
         $(".comp").remove();
-        yPosTop = 25;
+        yPosTop = 30;
 
         var nameCnt = 1;
         personArr.forEach(function(name) {
@@ -63,6 +58,28 @@ $(document).ready(function() {
         personArr.push(name);
         genList();
     };
+    addPerson("Hozaifa Abdalla");
+    addPerson("Sean Kirkland");
+    addPerson("Brendon James");
+    
+    var flashAndRemoveNameAnimate = function(name){
+        var indx=0, indxSelected;
+        personArr.forEach(function(nm){
+            if(nm == name){
+                indxSelected = indx;
+            }
+            indx++;
+        });
+        console.log($(".comp"));
+        $($(".comp")[indxSelected]).addClass('animated infinite flash');
+        setTimeout(function(){
+            $(".comp")[indxSelected].remove();
+            removePerson("Hozaifa Abdalla");
+            genList();
+        }, 5000);
+    };
+    flashAndRemoveNameAnimate("Hozaifa Abdalla");
+    
 
     options.onOpen = function(e) {
         console.log("Connection Open");
