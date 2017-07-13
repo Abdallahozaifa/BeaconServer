@@ -1,7 +1,7 @@
 /* global Image, $, swal */
 $(document).ready(function() {
-    var appImg = $("#appImg");
-    var options = {};
+    var appImg = $("#appImg"); // application image
+    var options = {}; // 
     var reqArr = [];
     var billYTop = 80;
     var scrollTimeOut;
@@ -16,20 +16,18 @@ $(document).ready(function() {
             img.src = "assets/images/money/50dollar.jpg";
         }
         else if (bill == "20") {
-            img.src = "assets/images/money/20dollar.jpg"
+            img.src = "assets/images/money/20dollar.jpg";
         }
         else if (bill == "10") {
-            img.src = "assets/images/money/10dollar.jpg"
+            img.src = "assets/images/money/10dollar.jpg";
         }
         $(img).css("width", "300px");
         $(img).css("height", "126px");
         img.className = "money";
         $(img).css("top", billYTop + "%");
         $("body").append(img);
-        // $(img).addClass("animated bounceInDown");
         billYTop += 4;
     };
-
 
     var calculateChange = function(amount) {
         var total, currentBill;
@@ -76,24 +74,22 @@ $(document).ready(function() {
                         break;
                 }
 
-                console.log(crntBill)
                 for (var i = 0; i < bill; i++) {
                     billsArr.push(crntBill);
                 }
             }
             mnyCnt++;
         });
+
         billsArr.forEach(function(money) {
             setTimeout(function() {
                 createBill(money);
             }, time);
             time += 1000;
         });
-        console.log(billsArr);
     };
 
     function pageScroll() {
-        // $('body').scrollTop(0);
         window.scrollBy(0, 1);
         scrollTimeOut = setTimeout(pageScroll, 10);
     }
@@ -152,11 +148,6 @@ $(document).ready(function() {
                 $(this).attr('src', img).bind('onreadystatechange load', function() {
                     if (this.complete) $(this).fadeIn(300, function() {
                         if (isNumeric(amount) == true) {
-                            // swal(
-                            //     'Transaction Receipt!',
-                            //     "$" + amount + ".00" + ' will be Withdrawn!',
-                            //     'success'
-                            // );
                             swal({
                                 title: "Transaction Receipt",
                                 type: 'success',
@@ -170,8 +161,6 @@ $(document).ready(function() {
                                 setTimeout(function() {
                                     clearTimeout(scrollTimeOut);
                                     $(".money").addClass("animated bounceOutDown");
-                                    
-                                    // billYTop = 80;
                                     setTimeout(function() {
                                         // $('body').scrollTop(0);
                                         window.location.reload();
@@ -180,8 +169,6 @@ $(document).ready(function() {
                             }, 5400);
                         }
                         else {
-                            console.log("Received img!");
-                            console.log(amount);
                             if (amount != undefined) {
                                 swal({
                                     title: 'Promotion Available!',

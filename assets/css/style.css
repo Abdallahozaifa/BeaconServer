@@ -1,16 +1,16 @@
-body{
-    background-color: black; 
+body {
+    background-color: black;
     width: 1755px;
     height: 976px;
 }
 
-.container{
+.container {
     background-image: url("/Users/fernandocarrillo/Desktop/CapitalOne-ATM-UI/Assets/ATM-Welcome.jpg");
-    background-position: center; 
-    background-repeat: no-repeat; 
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
-.ATM-Pic{
+.ATM-Pic {
     display: block;
     margin: 0px auto;
     max-width: 100%;
@@ -19,126 +19,127 @@ body{
     height: 100%;
 }
 
-.card-button{
-    
+.card-button {
     position: absolute;
     top: 73%;
-    left: 38%; 
-    width: 300px; 
+    left: 38%;
+    width: 300px;
     height: 25px;
     background: transparent;
     border: none !important;
-    font-size:0;
+    font-size: 0;
     cursor: pointer;
 }
 
-.smartphone-button{
-    
+.smartphone-button {
     position: absolute;
     top: 81%;
-    left: 38%; 
-    width: 300px; 
-    height: 25px; 
+    left: 38%;
+    width: 300px;
+    height: 25px;
     background: transparent;
     border: none !important;
-    font-size:0;
-    cursor: pointer; 
+    font-size: 0;
+    cursor: pointer;
 }
 
-.pinEnter-button{
-    
+.pinEnter-button {
     position: absolute;
     top: 68.5%;
-    left: 50%; 
-    width: 70px; 
-    height: 25px; 
+    left: 50%;
+    width: 70px;
+    height: 25px;
     background: transparent;
     border: none !important;
-    font-size:0;
-    cursor: pointer; 
+    font-size: 0;
+    cursor: pointer;
 }
 
-.pinField{
+.pinField {
     position: absolute;
     top: 68.4%;
-    left: 41%; 
+    left: 41%;
     width: 158px;
-    height: 22px; 
+    height: 22px;
 }
 
-#video, #exampleCanvas{
-    position: absolute; 
+#video,
+#exampleCanvas {
+    position: absolute;
     top: 7.1%;
     left: 16.0%;
     background: white;
 }
 
-#exampleCanvas{
-    width: 1272px; 
+#exampleCanvas {
+    width: 1272px;
     height: 720px;
 }
 
-h2.header { 
-   position: absolute; 
-   top: 10%; 
-   left: 21%; 
-   width: 100%; 
+h2.header {
+    position: absolute;
+    top: 10%;
+    left: 21%;
+    width: 100%;
 }
 
-h2.comp { 
-   position: absolute; 
-   /*top: 25%; */
-   left: 37.5%; 
-   width: 100%; 
+h2.comp {
+    position: absolute;
+    /*top: 25%; */
+    left: 37.5%;
+    width: 100%;
 }
 
-h2.header span { 
-   color: white; 
-   font: bold 72px Helvetica, Sans-Serif; 
-   letter-spacing: -1px;  
-   background: rgb(0, 0, 0); /* fallback color */
-   background: rgba(0, 0, 0, 0.7);
-   border-radius: 15px;
-   padding: 10px; 
+h2.header span {
+    color: white;
+    font: bold 72px Helvetica, Sans-Serif;
+    letter-spacing: -1px;
+    background: rgb(0, 0, 0);
+    /* fallback color */
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 15px;
+    padding: 10px;
 }
 
-h2.comp span { 
-   color: white; 
-   font: bold 45px Helvetica, Sans-Serif; 
-   letter-spacing: -1px;  
-   background: rgb(0, 0, 0); /* fallback color */
-   background: rgba(0, 0, 0, 0.7);
-   border-radius: 15px;
-   padding: 10px; 
+h2.comp span {
+    color: white;
+    font: bold 45px Helvetica, Sans-Serif;
+    letter-spacing: -1px;
+    background: rgb(0, 0, 0);
+    /* fallback color */
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 15px;
+    padding: 10px;
 }
 
 h2 span.spacer {
-   padding:0 5px;
-   margin-top: 15%;
+    padding: 0 5px;
+    margin-top: 15%;
 }
 
 h2 span.spacer2 {
-   padding:0 5px;
-   margin-top: 5%;
+    padding: 0 5px;
+    margin-top: 5%;
 }
 
-.money{
+.money {
     position: absolute;
     top: 84%;
     left: 34%;
 }
-.m2{
-    top:88%;
-    width:300px;
-    height:126px;
+
+.m2 {
+    top: 88%;
+    width: 300px;
+    height: 126px;
 }
 
-.blackScreen{
-    width:66.5%;
-    height:73.5%;
-    background-color:black;
+.blackScreen {
+    width: 66.5%;
+    height: 73.5%;
+    background-color: black;
     border: 1px solid black;
-    position:absolute;
+    position: absolute;
     top: 5.5%;
     left: 14.3%;
 }

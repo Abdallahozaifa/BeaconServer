@@ -5,32 +5,46 @@ $(document).ready(function() {
     var options = {};
     var reqArr = [];
     var personArr = [];
+    var pageComponents = {
+        tv: $(".tv"),
+        body: $("body"),
+        header: $(".header")
+    }
 
-    console.log($(".tv"));
-    $(".tv").css('margin-left', '8.4%');
-    $("body").css('overflow', 'hidden');
-    $("body").css("background", "white");
-    $(".header").hide();
-
-    /* Creates a component on the page */
-    var createComp = function(txt) {
-        var h2 = document.createElement("h2");
-        var span = document.createElement("span");
-        h2.className = "comp";
-        $(h2).css("top", yPosTop + "%");
-        h2.append(span);
-        $(span).html(txt);
-        $(container).append(h2);
+    function initializePage() {
+        pageComponents.tv.css('margin-left', '8.4%');
+        pageComponents.body.css('overflow', 'hidden');
+        pageComponents.body.css("background", "white");
+        pageComponents.header.hide();
+    }
+    
+    initializePage();
+    function customer(number, name) {
+        this.number = number;
+        this.name = name;
+        this.h2 = document.createElement("h2");
+        this.span = document.createElement("span");
+        this.$span = $(this.span);
+        this.h2.className = "comp";
+        this.$h2 = $(this.h2);
+        this.$h2.css("top", yPosTop + "%");
+        this.$h2.append(this.span);
+        this.$span.html(number + ". " + name);
+        this.$container = $(container);
+        this.$container.append(this.h2);
         yPosTop += 10;
-    };
-
+    }
+    
+    function generateCustomerList(){
+        
+    }  
     var genList = function() {
         $(".comp").remove();
         yPosTop = 30;
-
         var nameCnt = 1;
         personArr.forEach(function(name) {
-            createComp(nameCnt + ". " + name);
+            // createComp(nameCnt + ". " + name);
+            new customer(nameCnt, name);
             nameCnt++;
         });
     };
@@ -72,8 +86,6 @@ $(document).ready(function() {
         //     genList();
         // }, 5000);
     };
-    // flashAndRemoveNameAnimate("Hozaifa Abdalla");
-
 
     options.onOpen = function(e) {
         console.log("Connection Open");
@@ -120,8 +132,6 @@ $(document).ready(function() {
                     $($(".comp")[0]).addClass('animated infinite flash');
                 }
             }, 1100);
-
-            // flashAndRemoveNameAnimate(personArr[0]);
         },
         usrSelected: function(e) {
             var data = e.data;
