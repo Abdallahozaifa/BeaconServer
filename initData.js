@@ -18,7 +18,7 @@ clearDatabase();
 // MongoClient.connect(url, function(err, db) {
 //     assert.equal(null, err);
 //     var customer = {
-//         name: "Brendon James",
+//         name: "Hozaifa Abdalla",
 //         actNm: 1,
 //         queueNum: 3
 //     };

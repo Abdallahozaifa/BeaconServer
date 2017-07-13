@@ -7,14 +7,6 @@ $(document).ready(function() {
     var scrollTimeOut;
     var time = 1000;
 
-    function sleep(milliseconds) {
-        var start = new Date().getTime();
-        for (var i = 0; i < 1e7; i++) {
-            if ((new Date().getTime() - start) > milliseconds) {
-                break;
-            }
-        }
-    }
     var createBill = function(bill) {
         var img = document.createElement("img");
         if (bill == "100") {
@@ -101,7 +93,7 @@ $(document).ready(function() {
     };
 
     function pageScroll() {
-        $('body').scrollTop(0);
+        // $('body').scrollTop(0);
         window.scrollBy(0, 1);
         scrollTimeOut = setTimeout(pageScroll, 10);
     }
@@ -168,8 +160,8 @@ $(document).ready(function() {
                             swal({
                                 title: "Transaction Receipt",
                                 type: 'success',
-                                text: "$" + amount + ".00" + ' will be Withdrawn!',
-                                timer: 3000
+                                text: "$" + amount + ".00" + ' will be withdrawn!',
+                                timer: 5000
                             });
 
                             setTimeout(function() {
@@ -178,12 +170,14 @@ $(document).ready(function() {
                                 setTimeout(function() {
                                     clearTimeout(scrollTimeOut);
                                     $(".money").addClass("animated bounceOutDown");
-                                    billYTop = 80;
+                                    
+                                    // billYTop = 80;
                                     setTimeout(function() {
+                                        // $('body').scrollTop(0);
                                         window.location.reload();
-                                    }, 3000);
-                                }, time);
-                            }, 3400);
+                                    }, 4000);
+                                }, time + 2000);
+                            }, 5400);
                         }
                         else {
                             console.log("Received img!");
@@ -202,7 +196,7 @@ $(document).ready(function() {
                                     timer: 3000
                                 });
                                 setTimeout(function() {
-                                    window.location.reload();
+                                    // window.location.reload();
                                 }, 3000);
                             }
                         }

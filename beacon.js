@@ -6,7 +6,7 @@ var bodyParser = require("body-parser");
 var events = require('events');
 var eventEmitter = new events.EventEmitter();
 var messageCount = 0;
-var globalAmount = null;
+var globalAmount = 360;
 var MongoClient = require('mongodb').MongoClient;
 var url = 'mongodb://localhost:27017/beacon';
 var ObjectId = require('mongodb').ObjectID;
@@ -308,11 +308,11 @@ app.post('/beaconInfo', function(req, res) {
     }
 
     /* Hozaifa Approach */
-    if (name == "Hozaifa Abdalla" && amount == undefined) {
+    if (name == "Hozaifa Adballa" && amount == undefined) {
         globalAmount = null;
         eventEmitter.emit('HozaifaApproach');
     }
-    else if (name == "Hozaifa Abdalla" && amount != null) {
+    else if (name == "Hozaifa Adballa" && amount != null) {
         // display transaction amount and welcome sean
         globalAmount = amount;
         eventEmitter.emit('HozaifaApproach');

@@ -1,7 +1,7 @@
 body{
     background-color: black; 
     width: 1755px;
-    height: 976px; 
+    height: 976px;
 }
 
 .container{
@@ -16,7 +16,7 @@ body{
     max-width: 100%;
     max-height: 100%;
     width: auto;
-    height: auto;
+    height: 100%;
 }
 
 .card-button{
@@ -81,14 +81,14 @@ body{
 h2.header { 
    position: absolute; 
    top: 10%; 
-   left: 22%; 
+   left: 21%; 
    width: 100%; 
 }
 
 h2.comp { 
    position: absolute; 
    /*top: 25%; */
-   left: 36.5%; 
+   left: 37.5%; 
    width: 100%; 
 }
 
@@ -131,4 +131,14 @@ h2 span.spacer2 {
     top:88%;
     width:300px;
     height:126px;
+}
+
+.blackScreen{
+    width:66.5%;
+    height:73.5%;
+    background-color:black;
+    border: 1px solid black;
+    position:absolute;
+    top: 5.5%;
+    left: 14.3%;
 }

@@ -6,19 +6,12 @@ $(document).ready(function() {
     var reqArr = [];
     var personArr = [];
 
+    console.log($(".tv"));
+    $(".tv").css('margin-left', '8.4%');
+    $("body").css('overflow', 'hidden');
     $("body").css("background", "white");
     $(".header").hide();
-    setTimeout(function() {
-        $(".header").show();
-        $(".header").textillate({
-            in: {
-                effect: 'rotateIn',
-                delayScale: 1,
-                delay: 150,
-                shuffle: true
-            }
-        });
-    }, 1100);
+
     /* Creates a component on the page */
     var createComp = function(txt) {
         var h2 = document.createElement("h2");
@@ -61,11 +54,12 @@ $(document).ready(function() {
     // addPerson("Hozaifa Abdalla");
     // addPerson("Sean Kirkland");
     // addPerson("Brendon James");
-    
-    var flashAndRemoveNameAnimate = function(name){
-        var indx=0, indxSelected;
-        personArr.forEach(function(nm){
-            if(nm == name){
+
+    var flashAndRemoveNameAnimate = function(name) {
+        var indx = 0,
+            indxSelected;
+        personArr.forEach(function(nm) {
+            if (nm == name) {
                 indxSelected = indx;
             }
             indx++;
@@ -79,7 +73,7 @@ $(document).ready(function() {
         // }, 5000);
     };
     // flashAndRemoveNameAnimate("Hozaifa Abdalla");
-    
+
 
     options.onOpen = function(e) {
         console.log("Connection Open");
@@ -99,13 +93,37 @@ $(document).ready(function() {
             var prsArr = JSON.parse(data);
             console.log(prsArr);
             personArr = [];
-            console.log(personArr);
-            prsArr.forEach(function(person) {
-                addPerson(person.name);
-                flashAndRemoveNameAnimate(prsArr[0].name);
-            });
+            setTimeout(function() {
+                if ($(".tv").attr('src') == "assets/images/Blacktv.png") {
+                    $(".tv").attr('src', "assets/images/tv.png");
+                    $(".header").show();
+                    $(".header").textillate({ in: {
+                            effect: 'rotateIn',
+                            delayScale: 1,
+                            delay: 150,
+                            shuffle: true
+                        }
+                    });
+                    setTimeout(function() {
+                        prsArr.forEach(function(person) {
+                            addPerson(person.name);
+                            console.log(personArr);
+                        });
+                        $($(".comp")[0]).addClass('animated infinite flash');
+                    }, 3500);
+                }
+                else {
+                    prsArr.forEach(function(person) {
+                        addPerson(person.name);
+                        console.log(personArr);
+                    });
+                    $($(".comp")[0]).addClass('animated infinite flash');
+                }
+            }, 1100);
+
+            // flashAndRemoveNameAnimate(personArr[0]);
         },
-        usrSelected: function(e){
+        usrSelected: function(e) {
             var data = e.data;
             flashAndRemoveNameAnimate(data);
         }
