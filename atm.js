@@ -3,7 +3,7 @@ $(document).ready(function() {
     var appImg = $("#appImg"); // application image
     var options = {}; // 
     var reqArr = [];
-    var billYTop = 80;
+    var billYTop = 79;
     var scrollTimeOut;
     var time = 1000;
 
