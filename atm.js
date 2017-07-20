@@ -7,6 +7,42 @@ $(document).ready(function() {
     var scrollTimeOut;
     var time = 1000;
 
+    var createAtmText = function(greeting, name){
+        var windowWidth = $(window).width();
+        var customerName = $(".customer-name");
+        var customerWelcome = $(".customer-welcome");
+        
+        switch(greeting){
+            case 1:
+                customerWelcome.text("Welcome!");
+                break;
+            case 2:
+                customerWelcome.text("¡Hola!");
+                customerWelcome.css("left", "735px");
+                break;
+            case 3: 
+                customerWelcome.text("Bonjour!");
+                customerWelcome.css("left", "700px");
+                break;
+        }
+        
+        customerName.text(name);
+        var multiplier;
+        var customerNameLen = customerName.text().length;
+        if(customerNameLen >= 12 && customerNameLen <= 15){
+            multiplier = 0.36;
+        }else if(customerNameLen >= 10 && customerNameLen < 12){
+            multiplier = 0.37;
+        }else if(customerNameLen > 15 && customerNameLen < 17){
+            multiplier = 0.335;
+        }else if(customerNameLen >= 17){
+            multiplier = 0.35;
+        }else{
+            multiplier = 0.38;
+        }
+        customerName.css("left", windowWidth * multiplier + "px");
+    };
+    
     var createBill = function(bill) {
         var img = document.createElement("img");
         if (bill == "100") {
