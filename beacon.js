@@ -4,20 +4,24 @@ var fs = require('fs');
 var app = express();
 var bodyParser = require("body-parser");
 var events = require('events');
-var eventEmitter = new events.EventEmitter();
-var messageCount = 0;
-var globalAmount = 360;
+var eventEmitter = new events.EventEmitter().setMaxListeners(0);
 var MongoClient = require('mongodb').MongoClient;
-var url = 'mongodb://localhost:27017/beacon';
-var ObjectId = require('mongodb').ObjectID;
 var assert = require('assert');
 var Customer = require('./server_modules/Customer');
-var customers = [];
-var action = "";
-var glblName = "";
-eventEmitter.setMaxListeners(0);
 
-/**/
+/* GLOBAL VARIABLES */
+var url = 'mongodb://localhost:27017/beacon';
+var wtCount = 2;
+var queueNm = 1;
+var globalCustomer = {
+    name: "",
+    balance: "",
+    languages: "",
+    amount: "",
+    promotion: ""
+};
+
+/* Express Body Parser*/
 app.use(bodyParser.urlencoded({
     extended: true
 }));
@@ -36,109 +40,24 @@ app.get('/', function(req, res) {
 });
 
 app.get('/event', function(req, res) {
-    // var refreshPg = function(){
-    //     res.write("data: refresh\n\n");
-    // };
 
-    var displayGeneralAtm = function displayGeneralAtm() {
-        messageCount++;
-        var img = "assets/images/ATMWelcome/ATMBlank.PNG";
+    /* Sends Customer Data to the Client that is waiting */
+    var sendDataToClient = function() {
+        if(globalCustomer.balance > 0 && globalCustomer.balance <= 1000 ){
+            globalCustomer.promotion = "brewery.gif";
+        }else if(globalCustomer.balance > 1000 && globalCustomer.balance <= 1000){
+            globalCustomer.promotion = "chasecard.png";
+        }else{
+            globalCustomer.promotion = "saphhirecard.png";
+        }
         res.write("event: beacon\n");
-        res.write('id: ' + messageCount + '\n');
-        if (globalAmount != null) {
-            console.log("Sending Events!");
-            res.write("data: " + img + "\n");
-            res.write("data: " + globalAmount + "\n\n");
-        }
-        else {
-            res.write("data: " + img + "\n\n");
-        }
+        res.write("data: " + JSON.stringify(globalCustomer) + "\n\n");
         res.write("retry: 1000\n");
         res.write('\n');
-        console.log("Sent:  " + img);
     };
 
-    var displayWelcomeAtm = function displayWelcomeAtm() {
-        messageCount++;
-        var img = "assets/images/ATMWelcome/ATMGeneralWelcome.png";
-        res.write("event: beacon\n");
-        res.write('id: ' + messageCount + '\n');
-        if (globalAmount != null) {
-            console.log("Sending Events!");
-            res.write("data: " + img + "\n");
-            res.write("data: " + globalAmount + "\n\n");
-        }
-        else {
-            res.write("data: " + img + "\n\n");
-        }
-        res.write("retry: 1000\n");
-        res.write('\n');
-        console.log("Sent:  " + img);
-    };
+    eventEmitter.on('sendDataToClient', sendDataToClient);
 
-    var displayHozaifaWelcome = function() {
-        messageCount++;
-        var img = "assets/images/ATMGreeting/ATMWelcomeHozaifa.png";
-        res.write("event: beacon\n");
-        res.write('id: ' + messageCount + '\n');
-        if (globalAmount != null) {
-            console.log("Sending Events!");
-            res.write("data: " + img + "\n");
-            res.write("data: " + globalAmount + "\n\n");
-        }
-        else {
-            res.write("data: " + img + "\n");
-            res.write("data: " + "assets/images/ATMPromotions/chasecard.png" + "\n\n");
-        }
-        res.write("retry: 1000\n");
-        res.write('\n');
-        console.log("Sent:  " + img);
-    };
-
-    var displayBrendonWelcome = function() {
-        messageCount++;
-        var img = "assets/images/ATMGreeting/ATMWelcomeBrendon.png";
-        res.write("event: beacon\n");
-        res.write('id: ' + messageCount + '\n');
-        if (globalAmount != null) {
-            console.log("Sending Events!");
-            res.write("data: " + img + "\n");
-            res.write("data: " + globalAmount + "\n\n");
-        }
-        else {
-            res.write("data: " + img + "\n");
-            res.write("data: " + "assets/images/ATMPromotions/brewery.gif" + "\n\n");
-        }
-        res.write("retry: 1000\n");
-        res.write('\n');
-        console.log("Sent:  " + img);
-    };
-
-    var displaySeanWelcome = function() {
-        messageCount++;
-        var img = "assets/images/ATMGreeting/ATMWelcomeSean.png";
-        res.write('id: ' + messageCount + '\n');
-        res.write("event: beacon\n");
-        if (globalAmount != null) {
-            console.log("Sending Events!");
-            res.write("data: " + img + "\n");
-            res.write("data: " + globalAmount + "\n\n");
-        }
-        else {
-            res.write("data: " + img + "\n");
-            res.write("data: " + "assets/images/ATMPromotions/saphhirecard.png" + "\n\n");
-        }
-        res.write("retry: 1000\n");
-        res.write('\n');
-        console.log("Sent:  " + img);
-    };
-
-    // eventEmitter.on('refreshPg', refreshPg);
-    eventEmitter.on('farProximity', displayGeneralAtm);
-    eventEmitter.on('closeProximity', displayWelcomeAtm);
-    eventEmitter.on('BrendonApproach', displayBrendonWelcome);
-    eventEmitter.on('HozaifaApproach', displayHozaifaWelcome);
-    eventEmitter.on('SeanApproach', displaySeanWelcome);
     res.writeHead(200, {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",
@@ -150,11 +69,11 @@ app.get('/addHozaifa', function(req, res) {
     eventEmitter.emit("alterQueue");
 });
 
-app.get('/moneyTest', function(req, res){
-   console.log("Received request");
-   eventEmitter.emit("HozaifaApproach"); 
-   res.send(null);
-   res.end();
+app.get('/moneyTest', function(req, res) {
+    console.log("Received request");
+    eventEmitter.emit("HozaifaApproach");
+    res.send(null);
+    res.end();
 });
 
 app.get('/queueClient', function(req, res) {
@@ -169,9 +88,7 @@ app.get('/queueClient', function(req, res) {
                 Customer.findAllCustomers(db, function(customer) {
                     console.log(customer);
                     dbPrsArr.push(customer);
-                    messageCount++;
                     if (customerCnt == cnt) {
-                        res.write('id: ' + messageCount + '\n');
                         res.write("event: queue\n");
                         res.write("data: " + JSON.stringify(dbPrsArr) + "\n\n");
                         res.write("retry: 1000\n");
@@ -182,7 +99,7 @@ app.get('/queueClient', function(req, res) {
                     }
                     db.close();
                 });
-            })
+            });
         });
     };
 
@@ -202,44 +119,11 @@ app.get('/atm', function(req, res) {
     });
 });
 
-app.get('/sendWelcome', function(req, res) {
-    eventEmitter.emit('closeProximity');
+app.get('/sendCustomer', function(req, res) {
+    eventEmitter.emit('sendDataToClient');
     res.send(null);
     res.end();
 });
-
-app.get('/sendGeneral', function(req, res) {
-    eventEmitter.emit('farProximity');
-    res.send(null);
-    res.end();
-});
-
-// app.get('/refresh', function(req, res) {
-//     eventEmitter.emit('refreshPg');
-//     res.send(null);
-//     res.end();
-// });
-var clearDatabase = function() {
-    MongoClient.connect(url, function(err, db) {
-        assert.equal(null, err);
-        console.log("Connected correctly to server.");
-        Customer.removeAllCustomers(db);
-        customers = [];
-        db.close();
-    });
-};
-
-var findAllCustomers = function() {
-    MongoClient.connect(url, function(err, db) {
-        assert.equal(null, err);
-        console.log("Connected correctly to server.");
-        Customer.findAllCustomers(db, function(customer) {
-            console.log(customer);
-            //customers.push(customer);
-            db.close();
-        });
-    });
-};
 
 app.get('/tvscreen', function(req, res) {
     fs.readFile('branch.html', 'utf8', function(err, data) {
@@ -247,10 +131,8 @@ app.get('/tvscreen', function(req, res) {
         else return console.log(err);
     });
 });
-//clearDatabase();
 
-var wtCount = 2;
-var queueNm = 1;
+
 app.post('/queue', function(req, res) {
     var customer = {
         name: req.body.name,
@@ -276,49 +158,40 @@ app.post('/queue', function(req, res) {
             db.close();
         });
     });
-    
+
 
 });
 
-app.post('/beaconInfo', function(req, res) {
+app.post('/promotion', function(req, res) {
+    var name = req.body.name;
+    var balance = req.body.balance;
+    var language = req.body.languages;
+    console.log(req.body);
+    globalCustomer.name = name;
+    globalCustomer.balance = balance;
+    globalCustomer.languages = language;
+    eventEmitter.emit('sendDataToClient');
+});
 
+app.post('/transaction', function(req, res) {
     var name = req.body.name;
     var amount = req.body.amount;
+    var language = req.body.languages;
     console.log(req.body);
-    console.log("Received Sean request!");
-    /* Sean Approach */
-    if (name == "Sean Kirkland" && amount == undefined) {
-        globalAmount = null;
-        eventEmitter.emit('SeanApproach');
-    }
-    else if (name == "Sean Kirkland" && amount != null) {
-        // display transaction amount and welcome sean
-        globalAmount = amount;
-        eventEmitter.emit('SeanApproach');
-    }
-
-    /* Brendon Approach */
-    if (name == "Brendon James" && amount == undefined) {
-        globalAmount = null;
-        eventEmitter.emit('BrendonApproach');
-    }
-    else if (name == "Brendon James" && amount != null) {
-        globalAmount = amount;
-        eventEmitter.emit('BrendonApproach');
-    }
-
-    /* Hozaifa Approach */
-    if (name == "Hozaifa Adballa" && amount == undefined) {
-        globalAmount = null;
-        eventEmitter.emit('HozaifaApproach');
-    }
-    else if (name == "Hozaifa Adballa" && amount != null) {
-        // display transaction amount and welcome sean
-        globalAmount = amount;
-        eventEmitter.emit('HozaifaApproach');
-    }
+    globalCustomer.name = name;
+    globalCustomer.amount = amount;
+    globalCustomer.languages = language;
+    eventEmitter.emit('sendDataToClient');
 });
 
+app.get('/sendName', function(req, res) {
+    globalCustomer.name = "Hozaifa Abdalla";
+    globalCustomer.balance = 12000;
+    globalCustomer.languages = "Spanish";
+    eventEmitter.emit('sendDataToClient');
+    res.send(null);
+    res.end();
+});
 var server = app.listen(process.env.PORT || '8080', '0.0.0.0', function() {
     var host = server.address().address;
     var port = server.address().port;
