@@ -79,7 +79,7 @@ body {
 h2.header {
     position: absolute;
     top: 10%;
-    left: 21%;
+    left: 30%;
     width: 100%;
 }
 
@@ -125,7 +125,7 @@ h2 span.spacer2 {
 .money {
     position: absolute;
     top: 84%;
-    left: 34%;
+    left: 32%;
 }
 
 .m2 {
@@ -148,7 +148,7 @@ h2 span.spacer2 {
     color: white;
     position: absolute;
     top: 440px;
-    left: 690px;
+    left: 670px;
     font: bold 45px Helvetica, Sans-Serif;
     text-shadow: -2px 0 black, 0 2px black, 1px 0 black, 0 -1px black;
 }
@@ -156,8 +156,8 @@ h2 span.spacer2 {
 .customer-name{
     color: white;
     position: fixed;
-    top: 510px;
-    left: 650px;
+    top: 540px;
+    left: 600px;
     font: bold 30px Helvetica, Sans-Serif;
     text-shadow: -2px 0 black, 0 2px black, 1px 0 black, 0 -1px black;
     /*width:100%;*/

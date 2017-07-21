@@ -126,19 +126,25 @@ $(document).ready(function() {
                 if ($(".tv").attr('src') == "assets/images/Blacktv.png") {
                     $(".tv").attr('src', "assets/images/tv.png");
                     $(".header").show();
-                    $(".header").textillate({ in: {
-                            effect: 'rotateIn',
-                            delayScale: 1,
-                            delay: 150,
-                            shuffle: true
-                        }
-                    });
+                    // $(".header").textillate({ in: {
+                    //         effect: 'rotateIn',
+                    //         delayScale: 1,
+                    //         delay: 150,
+                    //         shuffle: true
+                    //     }
+                    // });
                     setTimeout(function() {
                         prsArr.forEach(function(person) {
                             addCustomer(person);
                             console.log(customerArr);
                         });
-                        $($(".comp")[0]).addClass('animated infinite flash');
+                        
+                        var arrSize = $(".comp").length;
+                        $($(".comp")[arrSize-1]).addClass('animated infinite flash');
+                        
+                        setTimeout(function(){
+                          $($(".comp")[arrSize-1]).removeClass('animated infinite flash');  
+                        }, 3000);
                     }, 3500);
                 }
                 else {

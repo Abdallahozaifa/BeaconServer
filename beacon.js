@@ -39,6 +39,16 @@ app.get('/', function(req, res) {
     res.send("Received request from server!");
 });
 
+var clearDatabase = function() {
+    MongoClient.connect(url, function(err, db) {
+        assert.equal(null, err);
+        console.log("Cleared out database!");
+        Customer.removeAllCustomers(db);
+        db.close();
+    });
+};
+
+clearDatabase();
 app.get('/event', function(req, res) {
 
     /* Sends Customer Data to the Client that is waiting */

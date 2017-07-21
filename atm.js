@@ -3,7 +3,7 @@ $(document).ready(function() {
     var appImg = $("#appImg"); // application image
     var options = {}; // 
     var reqArr = [];
-    var billYTop = 79;
+    var billYTop = 81;
     var scrollTimeOut;
     var time = 1000;
 
@@ -29,20 +29,21 @@ $(document).ready(function() {
         customerName.text(name);
         var multiplier;
         var customerNameLen = customerName.text().length;
-        if (customerNameLen >= 12 && customerNameLen <= 15) {
-            multiplier = 0.36;
-        }
-        else if (customerNameLen >= 10 && customerNameLen < 12) {
-            multiplier = 0.37;
+        console.log(customerNameLen);
+        if (customerNameLen >= 17) {
+            multiplier = 0.35;
         }
         else if (customerNameLen > 15 && customerNameLen < 17) {
             multiplier = 0.335;
         }
-        else if (customerNameLen >= 17) {
-            multiplier = 0.35;
+        else if (customerNameLen >= 13 && customerNameLen <= 15) {
+            multiplier = 0.34;
         }
-        else {
-            multiplier = 0.38;
+        else if (customerNameLen >= 10 && customerNameLen <= 12) {
+            multiplier = 0.37;
+        }
+        else if(customerNameLen >= 7 && customerNameLen < 10){
+            multiplier = 0.36;
         }
         customerName.css("left", windowWidth * multiplier + "px");
     };
