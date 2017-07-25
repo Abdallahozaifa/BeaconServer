@@ -2,7 +2,7 @@
  * @fileOverview Server file that handles all the requests from the web app and mobile app.
  * @author Hozaifa Abdalla
  * @version 1.0.0
- * @module beacon.js
+ * @module beacon js
  */
 
 /* LIBRARY IMPORTS */
@@ -61,7 +61,7 @@ app.get('/', function(req, res) {
  * @function
  * @param {string} - The string url for the handler
  * @param {callback} - The callback function
- * @module beacon.js
+ * @module beacon js
  */
 app.get('/event', function(req, res) {
 
@@ -97,7 +97,7 @@ app.get('/event', function(req, res) {
  * @function
  * @param {string} - The string url for the handler
  * @param {callback} - The callback function
- * @module beacon.js
+ * @module beacon js
  */
 app.get('/addHozaifa', function(req, res) {
     eventEmitter.emit("alterQueue");
@@ -111,7 +111,7 @@ app.get('/addHozaifa', function(req, res) {
  * @function
  * @param {string} - The string url for the handler
  * @param {callback} - The callback function
- * @module beacon.js
+ * @module beacon js
  */
 app.get('/moneyTest', function(req, res) {
     eventEmitter.emit("sendDataToClient");
@@ -125,7 +125,7 @@ app.get('/moneyTest', function(req, res) {
  * @function
  * @param {string} - The string url for the handler
  * @param {callback} - The callback function
- * @module beacon.js
+ * @module beacon js
  */
 app.get('/queueClient', function(req, res) {
     var alterQueue = function() {
@@ -169,7 +169,7 @@ app.get('/queueClient', function(req, res) {
  * @function
  * @param {string} - The string url for the handler
  * @param {callback} - The callback function
- * @module beacon.js
+ * @module beacon js
  */
 app.get('/atm', function(req, res) {
     fs.readFile('www/html/atm.html', 'utf8', function(err, data) {
@@ -184,7 +184,7 @@ app.get('/atm', function(req, res) {
  * @function
  * @param {string} - The string url for the handler
  * @param {callback} - The callback function
- * @module beacon.js
+ * @module beacon js
  */
 app.get('/sendCustomer', function(req, res) {
     eventEmitter.emit('sendDataToClient');
@@ -198,7 +198,7 @@ app.get('/sendCustomer', function(req, res) {
  * @function
  * @param {string} - The string url for the handler
  * @param {callback} - The callback function
- * @module beacon.js
+ * @module beacon js
  */
 app.get('/tvscreen', function(req, res) {
     fs.readFile('www/html/branch.html', 'utf8', function(err, data) {
@@ -213,7 +213,7 @@ app.get('/tvscreen', function(req, res) {
  * @function
  * @param {string} - The string url for the handler
  * @param {callback} - The callback function
- * @module beacon.js
+ * @module beacon js
  */
 app.post('/queue', function(req, res) {
     var customer = {
@@ -248,7 +248,7 @@ app.post('/queue', function(req, res) {
  * @function
  * @param {string} - The string url for the handler
  * @param {callback} - The callback function
- * @module beacon.js
+ * @module beacon js
  */
 app.post('/promotion', function(req, res) {
     var name = req.body.name;
@@ -267,7 +267,7 @@ app.post('/promotion', function(req, res) {
  * @function
  * @param {string} - The string url for the handler
  * @param {callback} - The callback function
- * @module beacon.js
+ * @module beacon js
  */
 app.post('/transaction', function(req, res) {
     var name = req.body.name;
@@ -286,7 +286,7 @@ app.post('/transaction', function(req, res) {
  * @function
  * @param {string} - The string url for the handler
  * @param {callback} - The callback function
- * @module beacon.js
+ * @module beacon js
  */
 app.get('/sendName', function(req, res) {
     globalCustomer.name = "Hozaifa Abdalla";
@@ -302,11 +302,12 @@ app.get('/sendName', function(req, res) {
  * @function
  * @param {string} - The string url for the port
  * @param {callback} - The callback function
- * @module beacon.js
+ * @module beacon js
  */
 var server = app.listen(process.env.PORT || '8080', '0.0.0.0', function() {
     var host = server.address().address;
     var port = server.address().port;
     console.log('running at http://' + host + ':' + port + "/atm");
     console.log('running at http://' + host + ':' + port + "/tvscreen");
+    console.log('running at http://' + host + ':' + port + "/documentation/index.html");
 });

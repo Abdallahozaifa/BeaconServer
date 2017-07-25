@@ -4,7 +4,7 @@
  * @fileOverview Javascript that runs on the branch html page.
  * @author Hozaifa Abdalla
  * @version 1.0.0
- * @module branch.js
+ * @module branch js
  */
 
 $(document).ready(function() {
@@ -30,7 +30,7 @@ $(document).ready(function() {
     /**
      * Intializes the page with certain css properties.
      * @function
-     * @module branch.js
+     * @module branch js
      */
     function initializePage() {
         pageComponents.tv.css('margin-left', '8.4%');
@@ -42,7 +42,7 @@ $(document).ready(function() {
     /**
      * Creates a new customer item.
      * @function
-     * @module branch.js
+     * @module branch js
      */
     function customerItem(number, name) {
         this.number = number;
@@ -63,7 +63,7 @@ $(document).ready(function() {
     /**
      * Creates the customer list on the tv screen.
      * @function
-     * @module branch.js
+     * @module branch js
      */
     function generateCustomerList() {
         $(".comp").remove();
@@ -78,7 +78,7 @@ $(document).ready(function() {
     /**
      * Adds a customer to the tv screen.
      * @function
-     * @module branch.js
+     * @module branch js
      */
     function addCustomer(customer) {
         customerArr.push(customer);
@@ -88,7 +88,7 @@ $(document).ready(function() {
     /**
      * Flashes and removes the animated name from the tv screen
      * @function
-     * @module branch.js
+     * @module branch js
      */
     var flashAndRemoveNameAnimate = function(name) {
         var indx = 0,
@@ -114,7 +114,7 @@ $(document).ready(function() {
          * Adds items to the queue on the tv screen from the customer idea 
          * @param {object} e - The customer object from the server
          * @function
-         * @module branch.js
+         * @module branch js
          */
         queue: function(e) {
             console.log("Received Data from Server");
@@ -151,7 +151,7 @@ $(document).ready(function() {
         /**
          * Flashes and removes the selected user(new customer).
          * @function
-         * @module branch.js
+         * @module branch js
          */
         usrSelected: function(e) {
             var data = e.data;
@@ -162,7 +162,7 @@ $(document).ready(function() {
     /**
      * Main function.
      * @function
-     * @module branch.js
+     * @module branch js
      */
     var main = function() {
         initializePage();

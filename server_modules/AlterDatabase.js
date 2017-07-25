@@ -2,7 +2,7 @@
  * @fileOverview Customer module for populating the database with sample data.
  * @author Hozaifa Abdalla
  * @version 1.0.0
- * @module alterDatabase.js
+ * @module AlterDatabase js
  */
 
 /*********************************************
@@ -43,7 +43,7 @@
     /**
      * Clears the database.
      * @function
-     * @module alterDatabase.js
+     * @module AlterDatabase js
      */
     var clearDatabase = function() {
         MongoClient.connect(url, function(err, db) {
@@ -58,7 +58,7 @@
      * Adds a customer to the database.
      * @param {object} customer - The customer object
      * @function
-     * @module alterDatabase.js
+     * @module AlterDatabase js
      */
     var addCustomer = function(customer) {
         MongoClient.connect(url, function(err, db) {
@@ -76,7 +76,7 @@
     /**
      * Adds sample customers to the database.
      * @function
-     * @module alterDatabase.js
+     * @module AlterDatabase js
      */
     var addSampleCustomers = function() {
         customers.forEach(function(customer) {

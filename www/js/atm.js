@@ -4,7 +4,7 @@
  * @fileOverview Javascript that runs on the atm html page.
  * @author Hozaifa Abdalla
  * @version 1.0.0
- * @module atm.js
+ * @module atm js
  */
 
 $(document).ready(function() {
@@ -20,7 +20,7 @@ $(document).ready(function() {
      * @function
      * @param {string} greeting - The greeting for the customer.
      * @param {string} name - The name of the customer.
-     * @module atm.js
+     * @module atm js
      */
     var createAtmText = function(greeting, name) {
         var windowWidth = $(window).width();
@@ -66,7 +66,7 @@ $(document).ready(function() {
      * Creates the money bills on the atm.
      * @function
      * @param {string} bill - The amount of the bill.
-     * @module atm.js
+     * @module atm js
      */
     var createBill = function(bill) {
         var img = document.createElement("img");
@@ -94,7 +94,7 @@ $(document).ready(function() {
      * Calculates the change for the transaction.
      * @function
      * @param {string} amount - The money amount from the transaction.
-     * @module atm.js
+     * @module atm js
      */
     var calculateChange = function(amount) {
         var total, currentBill;
@@ -123,7 +123,7 @@ $(document).ready(function() {
      * Displays the the bills based on the amounts given .
      * @function
      * @param {string} amount - The money amount from the transaction.
-     * @module atm.js
+     * @module atm js
      */
     var displayChange = function(amount) {
         var bills = calculateChange(amount);
@@ -165,7 +165,7 @@ $(document).ready(function() {
     /**
      * Scrolls the page down.
      * @function
-     * @module atm.js
+     * @module atm js
      */
     function pageScroll() {
         window.scrollBy(0, 1);
@@ -176,7 +176,7 @@ $(document).ready(function() {
      * Function that preloads the images into the cache when the page loads.
      * @function
      * @param {array} array - The array of images to be preloaded on the page.
-     * @module atm.js
+     * @module atm js
      */
     var preloadImages = function(array) {
         if (!preloadImages.list) {
@@ -202,7 +202,7 @@ $(document).ready(function() {
      * Function that preloads the images into the cache when the page loads.
      * @function
      * @param {string} n - .
-     * @module atm.js
+     * @module atm js
      */
     var isNumeric = function(n) {
         return !isNaN(parseFloat(n)) && isFinite(n);
@@ -220,7 +220,7 @@ $(document).ready(function() {
          * Function that handles the customer data from the server side event
          * @function
          * @param {object} e - The customer object from the server.
-         * @module atm.js
+         * @module atm js
          */
         beacon: function(e) {
             var globalCustomer = JSON.parse(e.data);
@@ -283,7 +283,7 @@ $(document).ready(function() {
     /**
      * Main function.
      * @function
-     * @module atm.js
+     * @module atm js
      */
     var main = function() {
         preloadImages([

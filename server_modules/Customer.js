@@ -2,7 +2,7 @@
  * @fileOverview Customer Module with methods for altering customers in the database.
  * @author Hozaifa Abdalla
  * @version 1.0.0
- * @module Customer.js
+ * @module Customer js
  */
 
 /****************************************
@@ -17,7 +17,7 @@
      * @param{object} db - The database connection object
      * @param{object} customer - The customer object to be inserted
      * @param{function} callback - The callback function
-     * @module Customer.js
+     * @module Customer js
      */
     var insertCustomer = function(db, customer, callback) {
         db.collection('customers').insertOne(customer, function(err, result) {
@@ -32,7 +32,7 @@
      * @param{object} db - The database connection object
      * @param{object} customer - The customer object to be inserted
      * @param{function} callback - The callback function
-     * @module Customer.js
+     * @module Customer js
      */
     var findCustomer = function(db, customer, callback) {
         db.collection('customers').findOne(customer, function(err, cstmr) {
@@ -45,7 +45,7 @@
      * Removes all customers from the database.
      * @function
      * @param{object} db - The database connection object
-     * @module Customer.js
+     * @module Customer js
      */
     var removeAllCustomers = function(db) {
         db.collection('customers').remove({});
@@ -57,7 +57,7 @@
      * @param{object} db - The database connection object
      * @param{string} usrID - The usrID of the customer to be updated
      * @param{function} callback - The callback function
-     * @module Customer.js
+     * @module Customer js
      */
     var updateCustomer = function(db, usrID, usr, callback) {
         db.collection('customers').update({
@@ -72,7 +72,7 @@
      * @function
      * @param{object} db - The database connection object
      * @param{function} callback - The callback function
-     * @module Customer.js
+     * @module Customer js
      */
     var findAllCustomers = function(db, callback) {
         var myCursor = db.collection('customers').find();
@@ -84,7 +84,7 @@
      * @function
      * @param{object} db - The database connection object
      * @param{string} customerID - The customer id
-     * @module Customer.js
+     * @module Customer js
      */
     var removeCustomer = function(db, customerID) {
         db.collection('customers').remove({
