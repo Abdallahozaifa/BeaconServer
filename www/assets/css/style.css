@@ -5,7 +5,6 @@ body {
 }
 
 .container {
-    background-image: url("/Users/fernandocarrillo/Desktop/CapitalOne-ATM-UI/Assets/ATM-Welcome.jpg");
     background-position: center;
     background-repeat: no-repeat;
 }
@@ -63,8 +62,7 @@ body {
     height: 22px;
 }
 
-#video,
-#exampleCanvas {
+#video, #exampleCanvas {
     position: absolute;
     top: 7.1%;
     left: 16.0%;
@@ -85,7 +83,6 @@ h2.header {
 
 h2.comp {
     position: absolute;
-    /*top: 25%; */
     left: 37.5%;
     width: 100%;
 }
@@ -95,7 +92,6 @@ h2.header span {
     font: bold 72px Helvetica, Sans-Serif;
     letter-spacing: -1px;
     background: rgb(0, 0, 0);
-    /* fallback color */
     background: rgba(0, 0, 0, 0.7);
     border-radius: 15px;
     padding: 10px;
@@ -106,7 +102,6 @@ h2.comp span {
     font: bold 45px Helvetica, Sans-Serif;
     letter-spacing: -1px;
     background: rgb(0, 0, 0);
-    /* fallback color */
     background: rgba(0, 0, 0, 0.7);
     border-radius: 15px;
     padding: 10px;
@@ -144,7 +139,7 @@ h2 span.spacer2 {
     left: 14.3%;
 }
 
-.customer-welcome{
+.customer-welcome {
     color: white;
     position: absolute;
     top: 440px;
@@ -153,18 +148,11 @@ h2 span.spacer2 {
     text-shadow: -2px 0 black, 0 2px black, 1px 0 black, 0 -1px black;
 }
 
-.customer-name{
+.customer-name {
     color: white;
     position: fixed;
     top: 540px;
     left: 600px;
     font: bold 30px Helvetica, Sans-Serif;
     text-shadow: -2px 0 black, 0 2px black, 1px 0 black, 0 -1px black;
-    /*width:100%;*/
-    /*margin:0;*/
-    /*padding:0;*/
-}
-
-.customer-span{
-    
 }

@@ -36,7 +36,7 @@
         myCursor.forEach(callback);
     };
 
-    var removecustomer = function(db, customerID) {
+    var removeCustomer = function(db, customerID) {
         db.collection('customers').remove({
             _id: customerID
         });
@@ -44,6 +44,7 @@
 
     exports.insertCustomer = insertCustomer;
     exports.findCustomer = findCustomer;
+    exports.removeCustomer = removeCustomer;
     exports.removeAllCustomers = removeAllCustomers;
     exports.updateCustomer = updateCustomer;
     exports.findAllCustomers = findAllCustomers;

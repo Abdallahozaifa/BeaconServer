@@ -28,10 +28,10 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 /* Serving static files*/
-app.use('/assets', express.static('assets'));
+app.use('/assets', express.static('www/assets'));
 app.use('/bower_components', express.static('bower_components'));
-app.use('/atm.js', express.static('atm.js'));
-app.use('/branch.js', express.static('branch.js'));
+app.use('/atm.js', express.static('www/js/atm.js'));
+app.use('/branch.js', express.static('www/js/branch.js'));
 
 /* HTTP Request handlers */
 app.get('/', function(req, res) {
@@ -124,7 +124,7 @@ app.get('/queueClient', function(req, res) {
 });
 
 app.get('/atm', function(req, res) {
-    fs.readFile('atm.html', 'utf8', function(err, data) {
+    fs.readFile('www/html/atm.html', 'utf8', function(err, data) {
         if (!err) res.send(data);
         else return console.log(err);
     });
@@ -137,7 +137,7 @@ app.get('/sendCustomer', function(req, res) {
 });
 
 app.get('/tvscreen', function(req, res) {
-    fs.readFile('branch.html', 'utf8', function(err, data) {
+    fs.readFile('www/html/branch.html', 'utf8', function(err, data) {
         if (!err) res.send(data);
         else return console.log(err);
     });
@@ -203,6 +203,7 @@ app.get('/sendName', function(req, res) {
     res.send(null);
     res.end();
 });
+
 var server = app.listen(process.env.PORT || '8080', '0.0.0.0', function() {
     var host = server.address().address;
     var port = server.address().port;
