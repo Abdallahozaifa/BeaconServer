@@ -7,7 +7,6 @@
     var insertCustomer = function(db, customer, callback) {
         db.collection('customers').insertOne(customer, function(err, result) {
             assert.equal(err, null);
-            console.log("Inserted a customer into the customers collection.");
             callback();
         });
     };

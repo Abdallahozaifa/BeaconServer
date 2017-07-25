@@ -8,6 +8,7 @@ var eventEmitter = new events.EventEmitter().setMaxListeners(0);
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var Customer = require('./server_modules/Customer');
+var AlterDatabase = require('./server_modules/AlterDatabase');
 
 /* GLOBAL VARIABLES */
 var url = 'mongodb://localhost:27017/beacon';
@@ -20,6 +21,9 @@ var globalCustomer = {
     amount: "",
     promotion: ""
 };
+
+/* Initially clearing the database during every server start up for presentation purposes! */
+AlterDatabase.clearDatabase();
 
 /* Express Body Parser*/
 app.use(bodyParser.urlencoded({
@@ -39,25 +43,17 @@ app.get('/', function(req, res) {
     res.send("Received request from server!");
 });
 
-var clearDatabase = function() {
-    MongoClient.connect(url, function(err, db) {
-        assert.equal(null, err);
-        console.log("Cleared out database!");
-        Customer.removeAllCustomers(db);
-        db.close();
-    });
-};
-
-// clearDatabase();
 app.get('/event', function(req, res) {
 
     /* Sends Customer Data to the Client that is waiting */
     var sendDataToClient = function() {
-        if(globalCustomer.balance > 0 && globalCustomer.balance <= 1000 ){
+        if (globalCustomer.balance > 0 && globalCustomer.balance <= 1000) {
             globalCustomer.promotion = "brewery.gif";
-        }else if(globalCustomer.balance > 1000 && globalCustomer.balance <= 1000){
+        }
+        else if (globalCustomer.balance > 1000 && globalCustomer.balance <= 1000) {
             globalCustomer.promotion = "chasecard.png";
-        }else{
+        }
+        else {
             globalCustomer.promotion = "saphhirecard.png";
         }
         res.write("event: beacon\n");
@@ -169,8 +165,6 @@ app.post('/queue', function(req, res) {
             db.close();
         });
     });
-
-
 });
 
 app.post('/promotion', function(req, res) {
