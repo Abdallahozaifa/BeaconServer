@@ -48,7 +48,7 @@ var clearDatabase = function() {
     });
 };
 
-clearDatabase();
+// clearDatabase();
 app.get('/event', function(req, res) {
 
     /* Sends Customer Data to the Client that is waiting */
@@ -77,11 +77,12 @@ app.get('/event', function(req, res) {
 
 app.get('/addHozaifa', function(req, res) {
     eventEmitter.emit("alterQueue");
+    res.send(null);
+    res.end();
 });
 
 app.get('/moneyTest', function(req, res) {
-    console.log("Received request");
-    eventEmitter.emit("HozaifaApproach");
+    eventEmitter.emit("sendDataToClient");
     res.send(null);
     res.end();
 });

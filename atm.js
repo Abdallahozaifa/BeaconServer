@@ -1,11 +1,12 @@
 /* global Image, $, swal */
 $(document).ready(function() {
-    var appImg = $("#appImg"); // application image
-    var options = {}; // 
-    var reqArr = [];
-    var billYTop = 81;
+    /* Global Variables */
     var scrollTimeOut;
-    var time = 1000;
+    var options = {}; // options object for the sse(server side event)
+    var reqArr = []; // request array 
+    var billYTop = 81; // dollar bill css property for top
+    var time = 1000; // dollar bill time start
+
 
     var createAtmText = function(greeting, name) {
         var windowWidth = $(window).width();
@@ -29,7 +30,6 @@ $(document).ready(function() {
         customerName.text(name);
         var multiplier;
         var customerNameLen = customerName.text().length;
-        console.log(customerNameLen);
         if (customerNameLen >= 17) {
             multiplier = 0.35;
         }
@@ -42,7 +42,7 @@ $(document).ready(function() {
         else if (customerNameLen >= 10 && customerNameLen <= 12) {
             multiplier = 0.37;
         }
-        else if(customerNameLen >= 7 && customerNameLen < 10){
+        else if (customerNameLen >= 7 && customerNameLen < 10) {
             multiplier = 0.36;
         }
         customerName.css("left", windowWidth * multiplier + "px");
@@ -156,20 +156,10 @@ $(document).ready(function() {
         }
     };
 
-    preloadImages([
-        "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/images/ATMWelcome/ATMGeneralWelcome.png",
-        "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/images/ATMWelcome/ATMBlank.PNG",
-        "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/images/ATMGreeting/ATMWelcomeHozaifa.png",
-        "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/images/ATMGreeting/ATMWelcomeBrendon.png",
-        "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/images/ATMGreeting/ATMWelcomeSean.png"
-    ]);
-
     options.onOpen = function(e) {
-        console.log("Connection Open");
     };
 
     options.onEnd = function(e) {
-        console.log("Connection Closed");
         reqArr[0] = $.SSE('http://beaconapp-abdallahozaifa.c9users.io:8080/event', options);
         reqArr[0].start();
     };
@@ -180,18 +170,18 @@ $(document).ready(function() {
 
     options.events = {
         beacon: function(e) {
-            console.log("Received Data from Center!");
             var globalCustomer = JSON.parse(e.data);
-            console.log(globalCustomer);
-            
-            if(globalCustomer.languages == "English"){
+
+            if (globalCustomer.languages == "English") {
                 createAtmText(1, globalCustomer.name);
-            }else if(globalCustomer.languages == "Spanish"){
+            }
+            else if (globalCustomer.languages == "Spanish") {
                 createAtmText(2, globalCustomer.name);
-            }else if(globalCustomer.languages == "French"){
+            }
+            else if (globalCustomer.languages == "French") {
                 createAtmText(3, globalCustomer.name);
             }
-            
+
             /* Customers wants to complete a transaction */
             if (isNumeric(globalCustomer.amount) == true) {
                 swal({
@@ -218,7 +208,7 @@ $(document).ready(function() {
                 if (globalCustomer.promotion != undefined) {
                     swal({
                         title: 'Promotion Available!',
-                        imageUrl: "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/images/ATMPromotions/" + globalCustomer.promotion,
+                        imageUrl: "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/images/Atm-promotions/" + globalCustomer.promotion,
                         imageWidth: 400,
                         imageHeight: 200,
                         animation: true,
@@ -237,7 +227,24 @@ $(document).ready(function() {
         }
     };
 
-    var sse = $.SSE('http://beaconapp-abdallahozaifa.c9users.io:8080/event', options);
-    reqArr.push(sse);
-    sse.start();
+    var main = function() {
+        preloadImages([
+            "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/images/Atm-welcome/GeneralWelcomeATM.png",
+            "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/images/Atm-welcome/blankAtm.PNG",
+            "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/images/Atm-promotions/brewery.gif",
+            "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/images/Atm-promotions/chasecard.png",
+            "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/images/Atm-promotions/saphhirecard.png",
+            "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/images/money/10dollar.jpg",
+            "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/images/money/20dollar.jpg",
+            "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/images/money/50dollar.jpg",
+            "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/images/money/100dollar.jpg"
+        ]);
+        var sse = $.SSE('http://beaconapp-abdallahozaifa.c9users.io:8080/event', options);
+        reqArr.push(sse);
+        sse.start();
+    };
+    
+    /* Main function */
+    main();
+
 });
