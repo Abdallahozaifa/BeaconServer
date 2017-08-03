@@ -12,7 +12,7 @@ $(document).ready(function() {
     var scrollTimeOut;
     var options = {}; // options object for the sse(server side event)
     var reqArr = []; // request array 
-    var billYTop = 81; // dollar bill css property for top
+    var billYTop = 72; // dollar bill css property for top
     var time = 1000; // dollar bill time start
 
     /**
@@ -29,14 +29,14 @@ $(document).ready(function() {
 
         switch (greeting) {
             case 1:
-                customerWelcome.text("Welcome!");
+                customerWelcome.text("Welcome");
                 break;
             case 2:
-                customerWelcome.text("¡Hola!");
+                customerWelcome.text("Hola");
                 customerWelcome.css("left", "735px");
                 break;
             case 3:
-                customerWelcome.text("Bonjour!");
+                customerWelcome.text("Bonjour");
                 customerWelcome.css("left", "700px");
                 break;
         }
@@ -44,24 +44,31 @@ $(document).ready(function() {
         customerName.text(name);
         var multiplier;
         var customerNameLen = customerName.text().length;
-        if (customerNameLen >= 17) {
+        if(name == "Hozaifa Abdalla"){
+            multiplier = 0.327;
+        }else if(name == "Brendon James"){
+            multiplier = 0.325;
+        }else if (name == "Sean Kirkland"){
+            multiplier = 0.329;
+        }else if (customerNameLen >= 17) {
             multiplier = 0.35;
         }
         else if (customerNameLen > 15 && customerNameLen < 17) {
             multiplier = 0.335;
         }
         else if (customerNameLen >= 13 && customerNameLen <= 15) {
-            multiplier = 0.34;
+            multiplier = 0.325;
         }
         else if (customerNameLen >= 10 && customerNameLen <= 12) {
             multiplier = 0.37;
         }
         else if (customerNameLen >= 7 && customerNameLen < 10) {
             multiplier = 0.36;
+        }else if(customerNameLen >= 4 && customerNameLen <= 6){
+            multiplier = 0.37;
         }
         customerName.css("left", windowWidth * multiplier + "px");
     };
-
     /**
      * Creates the money bills on the atm.
      * @function
@@ -252,7 +259,7 @@ $(document).ready(function() {
                         $(".money").addClass("animated bounceOutDown");
                         setTimeout(function() {
                             // $('body').scrollTop(0);
-                            //window.location.reload();
+                            window.location.reload();
                         }, 4000);
                     }, time + 2000);
                 }, 5400);
@@ -269,11 +276,11 @@ $(document).ready(function() {
                         html: $('<div>')
                             .addClass('animated wobble')
                             .text('A new promotion is available.'),
-                        timer: 3000
+                        timer: 5000
                     });
                     setTimeout(function() {
-                        // window.location.reload();
-                    }, 3000);
+                        window.location.reload();
+                    }, 8000);
                 }
             }
             reqArr[0].stop();

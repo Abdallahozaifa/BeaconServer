@@ -259,6 +259,7 @@ app.post('/promotion', function(req, res) {
     globalCustomer.balance = balance;
     globalCustomer.languages = language;
     eventEmitter.emit('sendDataToClient');
+    res.send("Done");
 });
 
 /**
@@ -278,6 +279,7 @@ app.post('/transaction', function(req, res) {
     globalCustomer.amount = amount;
     globalCustomer.languages = language;
     eventEmitter.emit('sendDataToClient');
+    res.send("Done");
 });
 
 /**

@@ -119,8 +119,7 @@ h2 span.spacer2 {
 
 .money {
     position: absolute;
-    top: 84%;
-    left: 32%;
+    left: 30.2%;
 }
 
 .m2 {
@@ -143,7 +142,7 @@ h2 span.spacer2 {
     color: white;
     position: absolute;
     top: 440px;
-    left: 670px;
+    left: 33%;
     font: bold 45px Helvetica, Sans-Serif;
     text-shadow: -2px 0 black, 0 2px black, 1px 0 black, 0 -1px black;
 }
