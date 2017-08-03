@@ -102,62 +102,61 @@ $(document).ready(function() {
         $($(".comp")[indxSelected]).addClass('animated infinite flash');
     };
 
-    request.options.onOpen = function(e) {};
-
-    request.options.onEnd = function(e) {
-        request.arr[0] = $.SSE('http://beaconapp-abdallahozaifa.c9users.io:8080/queueClient', request.options);
-        request.arr[0].start();
+    var subscribe = function(callback) {
+        var longPoll = function() {
+            $.ajax({
+                method: 'GET',
+                url: '/queueClient',
+                success: function(data) {
+                    callback(data)
+                },
+                complete: function() {
+                    longPoll()
+                },
+                timeout: 30000
+            });
+        };
+        longPoll();
     };
+    
+    /**
+     * Adds items to the queue on the tv screen from the customer idea 
+     * @param {object} e - The customer object from the server
+     * @function
+     * @module branch js
+     */
+    var handleData = function(personArray) {
+        console.log();
+        var prsArr = JSON.parse(personArray);
+        customerArr = [];
+        setTimeout(function() {
+            if ($(".tv").attr('src') == "assets/images/Tv/Blacktv.png") {
+                $(".tv").attr('src', "assets/images/Tv/tv.png");
+                $(".header").show();
 
-    request.options.events = {
-        /**
-         * Adds items to the queue on the tv screen from the customer idea 
-         * @param {object} e - The customer object from the server
-         * @function
-         * @module branch js
-         */
-        queue: function(e) {
-            console.log("Received Data from Server");
-            var data = e.data;
-            var prsArr = JSON.parse(data);
-            customerArr = [];
-            setTimeout(function() {
-                if ($(".tv").attr('src') == "assets/images/Tv/Blacktv.png") {
-                    $(".tv").attr('src', "assets/images/Tv/tv.png");
-                    $(".header").show();
-
-                    setTimeout(function() {
-                        prsArr.forEach(function(person) {
-                            addCustomer(person);
-                        });
-
-                        var arrSize = $(".comp").length;
-                        $($(".comp")[arrSize - 1]).addClass('animated infinite flash');
-
-                        setTimeout(function() {
-                            $($(".comp")[arrSize - 1]).removeClass('animated infinite flash');
-                        }, 3000);
-                    }, 3500);
-                }
-                else {
+                setTimeout(function() {
                     prsArr.forEach(function(person) {
                         addCustomer(person);
                     });
-                    $($(".comp")[0]).addClass('animated infinite flash');
-                }
-            }, 1100);
-        },
 
-        /**
-         * Flashes and removes the selected user(new customer).
-         * @function
-         * @module branch js
-         */
-        usrSelected: function(e) {
-            var data = e.data;
-            flashAndRemoveNameAnimate(data);
-        }
+                    var arrSize = $(".comp").length;
+                    $($(".comp")[arrSize - 1]).addClass('animated infinite flash');
+
+                    setTimeout(function() {
+                        $($(".comp")[arrSize - 1]).removeClass('animated infinite flash');
+                    }, 3000);
+                }, 3500);
+            }
+            else {
+                prsArr.forEach(function(person) {
+                    addCustomer(person);
+                });
+                $($(".comp")[0]).addClass('animated infinite flash');
+            }
+        }, 1100);
+        flashAndRemoveNameAnimate(personArray);
     };
+
 
     /**
      * Main function.
@@ -166,9 +165,9 @@ $(document).ready(function() {
      */
     var main = function() {
         initializePage();
-        request.sse = $.SSE('http://beaconapp-abdallahozaifa.c9users.io:8080/queueClient', request.options);
-        request.arr.push(request.sse);
-        request.sse.start();
+        subscribe(function(personArray){
+            handleData(personArray);
+        });
     };
 
     /* Main function */

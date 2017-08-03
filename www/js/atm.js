@@ -44,13 +44,16 @@ $(document).ready(function() {
         customerName.text(name);
         var multiplier;
         var customerNameLen = customerName.text().length;
-        if(name == "Hozaifa Abdalla"){
+        if (name == "Hozaifa Abdalla") {
             multiplier = 0.327;
-        }else if(name == "Brendon James"){
+        }
+        else if (name == "Brendon James") {
             multiplier = 0.325;
-        }else if (name == "Sean Kirkland"){
+        }
+        else if (name == "Sean Kirkland") {
             multiplier = 0.329;
-        }else if (customerNameLen >= 17) {
+        }
+        else if (customerNameLen >= 17) {
             multiplier = 0.35;
         }
         else if (customerNameLen > 15 && customerNameLen < 17) {
@@ -64,7 +67,8 @@ $(document).ready(function() {
         }
         else if (customerNameLen >= 7 && customerNameLen < 10) {
             multiplier = 0.36;
-        }else if(customerNameLen >= 4 && customerNameLen <= 6){
+        }
+        else if (customerNameLen >= 4 && customerNameLen <= 6) {
             multiplier = 0.37;
         }
         customerName.css("left", windowWidth * multiplier + "px");
@@ -205,6 +209,23 @@ $(document).ready(function() {
         }
     };
 
+    var subscribe = function(callback) {
+        var longPoll = function() {
+            $.ajax({
+                method: 'GET',
+                url: '/event',
+                success: function(data) {
+                    callback(data)
+                },
+                complete: function() {
+                    longPoll()
+                },
+                timeout: 30000
+            });
+        };
+        longPoll();
+    };
+
     /**
      * Function that preloads the images into the cache when the page loads.
      * @function
@@ -214,76 +235,62 @@ $(document).ready(function() {
     var isNumeric = function(n) {
         return !isNaN(parseFloat(n)) && isFinite(n);
     };
+    
+    var handleData = function(customer) {
+        console.log(customer);
+        var customer = JSON.parse(customer);
+        console.log(customer);
+        
+        if (customer.languages == "English") {
+            createAtmText(1, customer.name);
+        }
+        else if (customer.languages == "Spanish") {
+            createAtmText(2, customer.name);
+        }
+        else if (customer.languages == "French") {
+            createAtmText(3, customer.name);
+        }
 
-    options.onOpen = function(e) {};
+        /* Customers wants to complete a transaction */
+        if (isNumeric(customer.amount) == true) {
+            swal({
+                title: "Transaction Receipt",
+                type: 'success',
+                text: "$" + customer.amount + ".00" + ' will be withdrawn!',
+                timer: 5000
+            });
 
-    options.onEnd = function(e) {
-        reqArr[0] = $.SSE('http://beaconapp-abdallahozaifa.c9users.io:8080/event', options);
-        reqArr[0].start();
-    };
-
-    options.events = {
-        /**
-         * Function that handles the customer data from the server side event
-         * @function
-         * @param {object} e - The customer object from the server.
-         * @module atm js
-         */
-        beacon: function(e) {
-            var globalCustomer = JSON.parse(e.data);
-
-            if (globalCustomer.languages == "English") {
-                createAtmText(1, globalCustomer.name);
-            }
-            else if (globalCustomer.languages == "Spanish") {
-                createAtmText(2, globalCustomer.name);
-            }
-            else if (globalCustomer.languages == "French") {
-                createAtmText(3, globalCustomer.name);
-            }
-
-            /* Customers wants to complete a transaction */
-            if (isNumeric(globalCustomer.amount) == true) {
+            setTimeout(function() {
+                displayChange(customer.amount);
+                pageScroll();
+                setTimeout(function() {
+                    clearTimeout(scrollTimeOut);
+                    $(".money").addClass("animated bounceOutDown");
+                    setTimeout(function() {
+                        // $('body').scrollTop(0);
+                        window.location.reload();
+                    }, 4000);
+                }, time + 2000);
+            }, 5400);
+        }
+        else {
+            if (customer.promotion != undefined) {
                 swal({
-                    title: "Transaction Receipt",
-                    type: 'success',
-                    text: "$" + globalCustomer.amount + ".00" + ' will be withdrawn!',
+                    title: 'Promotion Available!',
+                    imageUrl: "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/images/Atm-promotions/" + customer.promotion,
+                    imageWidth: 400,
+                    imageHeight: 200,
+                    animation: true,
+                    showCloseButton: true,
+                    html: $('<div>')
+                        .addClass('animated wobble')
+                        .text('A new promotion is available.'),
                     timer: 5000
                 });
-
                 setTimeout(function() {
-                    displayChange(globalCustomer.amount);
-                    pageScroll();
-                    setTimeout(function() {
-                        clearTimeout(scrollTimeOut);
-                        $(".money").addClass("animated bounceOutDown");
-                        setTimeout(function() {
-                            // $('body').scrollTop(0);
-                            window.location.reload();
-                        }, 4000);
-                    }, time + 2000);
-                }, 5400);
+                    window.location.reload();
+                }, 8000);
             }
-            else {
-                if (globalCustomer.promotion != undefined) {
-                    swal({
-                        title: 'Promotion Available!',
-                        imageUrl: "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/images/Atm-promotions/" + globalCustomer.promotion,
-                        imageWidth: 400,
-                        imageHeight: 200,
-                        animation: true,
-                        showCloseButton: true,
-                        html: $('<div>')
-                            .addClass('animated wobble')
-                            .text('A new promotion is available.'),
-                        timer: 5000
-                    });
-                    setTimeout(function() {
-                        window.location.reload();
-                    }, 8000);
-                }
-            }
-            reqArr[0].stop();
         }
     };
     
@@ -304,9 +311,10 @@ $(document).ready(function() {
             "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/images/money/50dollar.jpg",
             "http://beaconapp-abdallahozaifa.c9users.io:8080/assets/images/money/100dollar.jpg"
         ]);
-        var sse = $.SSE('http://beaconapp-abdallahozaifa.c9users.io:8080/event', options);
-        reqArr.push(sse);
-        sse.start();
+        
+        subscribe(function(customer){
+            handleData(customer);
+        });
     };
 
     /* Main function */

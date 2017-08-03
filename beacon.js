@@ -21,13 +21,6 @@ var AlterDatabase = require('./server_modules/AlterDatabase');
 var url = 'mongodb://localhost:27017/beacon';
 var wtCount = 2;
 var queueNm = 1;
-var globalCustomer = {
-    name: "",
-    balance: "",
-    languages: "",
-    amount: "",
-    promotion: ""
-};
 
 /* Initially clearing the database during every server start up for presentation purposes! */
 AlterDatabase.clearDatabase();
@@ -49,120 +42,6 @@ app.use('/documentation', express.static('out'));
  *      HTTP REQUEST HANDLERS           *
  ****************************************/
 
-app.get('/', function(req, res) {
-    console.log("Received request from user Agent: " + req.headers["user-agent"]);
-    res.send("Received request from server!");
-});
-
-
-/**
- * GET Request handler for '/event'
- * Sends the customer object to the client with the promotion.
- * @function
- * @param {string} - The string url for the handler
- * @param {callback} - The callback function
- * @module beacon js
- */
-app.get('/event', function(req, res) {
-
-    /* Sends Customer Data to the Client that is waiting */
-    var sendDataToClient = function() {
-        if (globalCustomer.balance > 0 && globalCustomer.balance <= 1000) {
-            globalCustomer.promotion = "brewery.gif";
-        }
-        else if (globalCustomer.balance > 1000 && globalCustomer.balance <= 1000) {
-            globalCustomer.promotion = "chasecard.png";
-        }
-        else {
-            globalCustomer.promotion = "saphhirecard.png";
-        }
-        res.write("event: beacon\n");
-        res.write("data: " + JSON.stringify(globalCustomer) + "\n\n");
-        res.write("retry: 1000\n");
-        res.write('\n');
-    };
-
-    eventEmitter.on('sendDataToClient', sendDataToClient);
-
-    res.writeHead(200, {
-        "Content-Type": "text/event-stream",
-        "Cache-Control": "no-cache",
-        "Connection": "keep-alive"
-    });
-});
-
-/**
- * GET Request handler for '/addHozaifa'
- * Emits an alterqueue event .
- * @function
- * @param {string} - The string url for the handler
- * @param {callback} - The callback function
- * @module beacon js
- */
-app.get('/addHozaifa', function(req, res) {
-    eventEmitter.emit("alterQueue");
-    res.send(null);
-    res.end();
-});
-
-/**
- * GET Request handler for '/moneyTest'
- * Emits an sendDataToClient event .
- * @function
- * @param {string} - The string url for the handler
- * @param {callback} - The callback function
- * @module beacon js
- */
-app.get('/moneyTest', function(req, res) {
-    eventEmitter.emit("sendDataToClient");
-    res.send(null);
-    res.end();
-});
-
-/**
- * GET Request handler for '/queueClient'
- * Sends the customer queuing data to the web app.
- * @function
- * @param {string} - The string url for the handler
- * @param {callback} - The callback function
- * @module beacon js
- */
-app.get('/queueClient', function(req, res) {
-    var alterQueue = function() {
-        var dbPrsArr = [];
-        var customerCnt = 1;
-        MongoClient.connect(url, function(err, db) {
-            assert.equal(null, err);
-            console.log("Connected correctly to server.");
-            db.collection('customers').count(function(err, cnt) {
-                assert.equal(null, err);
-                Customer.findAllCustomers(db, function(customer) {
-                    console.log(customer);
-                    dbPrsArr.push(customer);
-                    if (customerCnt == cnt) {
-                        res.write("event: queue\n");
-                        res.write("data: " + JSON.stringify(dbPrsArr) + "\n\n");
-                        res.write("retry: 1000\n");
-                        res.write('\n');
-                    }
-                    else {
-                        customerCnt++;
-                    }
-                    db.close();
-                });
-            });
-        });
-    };
-
-    eventEmitter.on('alterQueue', alterQueue);
-
-    res.writeHead(200, {
-        "Content-Type": "text/event-stream",
-        "Cache-Control": "no-cache",
-        "Connection": "keep-alive"
-    });
-});
-
 /**
  * GET Request handler for '/atm'
  * Sends the client the atm file.
@@ -176,20 +55,6 @@ app.get('/atm', function(req, res) {
         if (!err) res.send(data);
         else return console.log(err);
     });
-});
-
-/**
- * GET Request handler for '/sendCustomer'
- * Emits a sendDataToClient event .
- * @function
- * @param {string} - The string url for the handler
- * @param {callback} - The callback function
- * @module beacon js
- */
-app.get('/sendCustomer', function(req, res) {
-    eventEmitter.emit('sendDataToClient');
-    res.send(null);
-    res.end();
 });
 
 /**
@@ -207,6 +72,87 @@ app.get('/tvscreen', function(req, res) {
     });
 });
 
+
+/*****************************************************
+ *      LONG POLLING HTTP REQUEST HANDLERS           *
+ *****************************************************/
+/**
+ * GET Request handler for '/event'
+ * Sends the customer object to the client with the promotion.
+ * @function
+ * @param {string} - The string url for the handler
+ * @param {callback} - The callback function
+ * @module beacon js
+ */
+app.get('/event', function(req, res) {
+
+    /* Sends Customer Data to the Client that is waiting */
+    var addMessageListener = function(res) {
+        eventEmitter.once('sendDataToClient', function(data) {
+            console.log(data);
+            var customer = data.customer;
+            if (data.event == "promotion") {
+                console.log("Sending promotion event!");
+                if (customer.balance > 0 && customer.balance <= 1000) {
+                    customer.promotion = "brewery.gif";
+                }
+                else if (customer.balance > 1000 && customer.balance <= 1000) {
+                    customer.promotion = "chasecard.png";
+                }
+                else {
+                    customer.promotion = "saphhirecard.png";
+                }
+            }
+            else if (data.event == "transaction") {
+                console.log("Sending transaction event!");
+            }
+            res.send(JSON.stringify(customer));
+        });
+    };
+
+    /* Adding a message listener */
+    addMessageListener(res);
+});
+
+
+/**
+ * GET Request handler for '/queueClient'
+ * Sends the customer queuing data to the web app.
+ * @function
+ * @param {string} - The string url for the handler
+ * @param {callback} - The callback function
+ * @module beacon js
+ */
+app.get('/queueClient', function(req, res) {
+    var addMessageListener = function() {
+        eventEmitter.once('alterQueue', function() {
+            var dbPrsArr = [];
+            var customerCnt = 1;
+            MongoClient.connect(url, function(err, db) {
+                assert.equal(null, err);
+                console.log("Connected correctly to server.");
+                db.collection('customers').count(function(err, cnt) {
+                    assert.equal(null, err);
+                    Customer.findAllCustomers(db, function(customer) {
+                        dbPrsArr.push(customer);
+                        if (customerCnt == cnt) {
+                            console.log(dbPrsArr);
+                            res.send(JSON.stringify(dbPrsArr));
+                        }else {
+                            customerCnt++;
+                        }
+                        db.close();
+                    });
+                });
+            });
+        });
+    };
+    addMessageListener(res);
+});
+
+/***************************************************
+ *      MOBILE APP HTTP REQUEST HANDLERS           *
+ ***************************************************/
 /**
  * POST Request handler for '/queue'
  * Adds each incoming customer to the database from the mobile app .
@@ -251,14 +197,12 @@ app.post('/queue', function(req, res) {
  * @module beacon js
  */
 app.post('/promotion', function(req, res) {
-    var name = req.body.name;
-    var balance = req.body.balance;
-    var language = req.body.languages;
     console.log(req.body);
-    globalCustomer.name = name;
-    globalCustomer.balance = balance;
-    globalCustomer.languages = language;
-    eventEmitter.emit('sendDataToClient');
+    var data = {
+        customer: req.body,
+        event: "promotion"
+    };
+    eventEmitter.emit('sendDataToClient', data);
     res.send("Done");
 });
 
@@ -271,15 +215,31 @@ app.post('/promotion', function(req, res) {
  * @module beacon js
  */
 app.post('/transaction', function(req, res) {
-    var name = req.body.name;
-    var amount = req.body.amount;
-    var language = req.body.languages;
-    console.log(req.body);
-    globalCustomer.name = name;
-    globalCustomer.amount = amount;
-    globalCustomer.languages = language;
-    eventEmitter.emit('sendDataToClient');
+    console.log("Transaction received!");
+    var data = {
+        customer: req.body,
+        event: "transaction"
+    };
+    eventEmitter.emit('sendDataToClient', data);
     res.send("Done");
+});
+
+
+/***************************************************
+ *      TESTING HTTP REQUEST HANDLERS              *
+ ***************************************************/
+/**
+ * GET Request handler for '/addHozaifa'
+ * Emits an alterqueue event .
+ * @function
+ * @param {string} - The string url for the handler
+ * @param {callback} - The callback function
+ * @module beacon js
+ */
+app.get('/turnOnQueue', function(req, res) {
+    eventEmitter.emit("alterQueue");
+    res.send(null);
+    res.end();
 });
 
 /**
@@ -290,11 +250,19 @@ app.post('/transaction', function(req, res) {
  * @param {callback} - The callback function
  * @module beacon js
  */
-app.get('/sendName', function(req, res) {
-    globalCustomer.name = "Hozaifa Abdalla";
-    globalCustomer.balance = 12000;
-    globalCustomer.languages = "Spanish";
-    eventEmitter.emit('sendDataToClient');
+app.get('/sendCustomer', function(req, res) {
+    var customer = {
+        name: "Hozaifa Abdalla",
+        balance: 12000,
+        languages: "Spanish",
+        amount: "550",
+        event: "transaction"
+    };
+    var data = {
+        customer: customer,
+        event: "promotion"
+    };
+    eventEmitter.emit('sendDataToClient', data);
     res.send(null);
     res.end();
 });
